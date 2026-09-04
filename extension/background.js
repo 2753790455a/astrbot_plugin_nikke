@@ -14,6 +14,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
       // 非JSON或不完整请求头不保存，等待官网后续完整请求。
     }
   },
-  { urls: ["https://api.blablalink.com/*"] },
+  // 新版官网会先从多个 BlaBlaLink 子域发起请求，不能只监听 api 子域。
+  { urls: ["https://*.blablalink.com/*"] },
   ["requestHeaders", "extraHeaders"]
 );

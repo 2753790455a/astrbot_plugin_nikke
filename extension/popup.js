@@ -16,6 +16,21 @@ function parseBindUrl() {
   return { url, token: match[1] };
 }
 
+function buildFallbackContext(cookies) {
+  const openid = cookies.find((cookie) => cookie.name === "game_openid")?.value;
+  if (!openid) return "";
+  const gameId = cookies.find((cookie) => cookie.name === "game_gameid")?.value || "3";
+  // 官网请求头中的字段均为公开请求上下文，不包含密码或验证码。
+  return JSON.stringify({
+    openid,
+    intl_game_id: gameId,
+    language: "zh-TW",
+    env: "prod",
+    source: "outer",
+    data_statistics_scene: "outer",
+  });
+}
+
 document.getElementById("openLogin").addEventListener("click", async () => {
   try {
     parseBindUrl();
@@ -37,9 +52,10 @@ document.getElementById("submit").addEventListener("click", async () => {
     const names = new Set(cookies.map(cookie => cookie.name));
     const missing = required.filter(name => !names.has(name));
     if (missing.length) throw new Error(`尚未完成登录，缺少：${missing.join(", ")}`);
-    const { xCommonParams } = await chrome.storage.local.get("xCommonParams");
+    const stored = await chrome.storage.local.get("xCommonParams");
+    const xCommonParams = stored.xCommonParams || buildFallbackContext(cookies);
     if (!xCommonParams) {
-      throw new Error("尚未捕获账号上下文。请打开BlaBlaLink个人主页并刷新一次，再提交绑定。");
+      throw new Error("尚未获取账号上下文。请确认已登录BlaBlaLink并刷新个人主页后重试。");
     }
     const response = await fetch(`${url.origin}/api/bind/cookies`, {
       method: "POST",

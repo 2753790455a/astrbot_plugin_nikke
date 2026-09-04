@@ -431,7 +431,13 @@ class ExtensionTests(unittest.TestCase):
         self.assertEqual(set(manifest["permissions"]), {"cookies", "tabs", "storage", "webRequest"})
         background = (root / "extension" / "background.js").read_text(encoding="utf-8")
         self.assertIn("x-common-params", background)
+        self.assertIn("https://*.blablalink.com/*", background)
         self.assertNotIn("requestBody", background)
+
+        popup = (root / "extension" / "popup.js").read_text(encoding="utf-8")
+        self.assertIn("buildFallbackContext", popup)
+        self.assertIn("game_openid", popup)
+        self.assertNotIn("password", popup.lower())
 
 
 class HelpTests(unittest.TestCase):
