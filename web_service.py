@@ -104,7 +104,7 @@ class BindingWebService:
         return web.Response(status=204)
 
     async def health(self, _: web.Request) -> web.Response:
-        return web.json_response({"ok": True, "service": "nikke-binding", "version": "0.1.3"})
+        return web.json_response({"ok": True, "service": "nikke-binding", "version": "0.1.4"})
 
     async def create_session(self, request: web.Request) -> web.Response:
         """供受信任的机器人进程创建绑定会话，公网匿名请求不能调用。"""

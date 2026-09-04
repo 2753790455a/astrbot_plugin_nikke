@@ -274,6 +274,46 @@ class BlaBlaClient:
             merged.append({**item, **by_code.get(code, {})})
         return merged
 
+    async def get_character_detail(
+        self,
+        account: dict[str, Any],
+        name_code: str,
+    ) -> dict[str, Any]:
+        """只请求指定角色的详情，并保留原始装备槽位与状态效果。"""
+        code = str(name_code).strip()
+        roster = await self.get_roster(account, include_details=False)
+        roster_item = next(
+            (item for item in roster if str(item.get("name_code", "")) == code),
+            None,
+        )
+        if roster_item is None:
+            raise ValueError("该账号未持有这名妮姬")
+        response = await self._post(
+            CHARACTER_DETAILS,
+            account["cookie"],
+            {
+                "intl_open_id": account.get("game_openid", ""),
+                "nikke_area_id": int(account["area_id"]),
+                "name_codes": [code],
+            },
+        )
+        data = response.get("data", {}) or {}
+        detail = next(
+            (
+                item
+                for item in (data.get("character_details", []) or [])
+                if str(item.get("name_code", "")) == code
+            ),
+            None,
+        )
+        if detail is None:
+            raise BlaBlaError("未获取到该角色详情", endpoint="GetUserCharacterDetails")
+        return {
+            "roster_item": roster_item,
+            "detail": detail,
+            "state_effects": data.get("state_effects", []) or [],
+        }
+
     async def get_directory(self) -> list[dict[str, Any]]:
         async with httpx.AsyncClient(timeout=self.timeout) as client:
             zh_resp, en_resp = await asyncio.gather(

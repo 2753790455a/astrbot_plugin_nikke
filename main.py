@@ -18,6 +18,8 @@ from astrbot.api.event import AstrMessageEvent, MessageChain, filter
 from astrbot.api.message_components import Image
 from astrbot.api.star import Context, Star, register
 
+from .card_builder import CharacterCardBuilder
+from .character_card_renderer import CharacterCardRenderer
 from .client import BlaBlaClient, BlaBlaError, CookieExpired
 from .renderer import CardRenderer
 from .storage import NikkeStore
@@ -28,7 +30,7 @@ from .web_service import BindingWebService
     "astrbot_plugin_nikke",
     "September",
     "NIKKE BlaBlaLink 账号练度、资料查询与每日汇总",
-    "0.1.3",
+    "0.1.4",
     "https://github.com/September6969/astrbot_plugin_nikke",
 )
 class NikkePlugin(Star):
@@ -46,6 +48,11 @@ class NikkePlugin(Star):
             lambda message: logger.info(f"[NIKKE诊断] {message}"),
         )
         self.renderer = CardRenderer(self.data_dir / "cards", self.plugin_dir / "fonts")
+        self.character_builder = CharacterCardBuilder()
+        self.character_renderer = CharacterCardRenderer(
+            self.data_dir / "cards",
+            self.plugin_dir / "fonts",
+        )
         self.web = BindingWebService(
             self.store,
             self.client,
@@ -180,7 +187,7 @@ class NikkePlugin(Star):
         if include_admin:
             visible.append(sections["管理"])
         return (
-            "NIKKE 综合助手 0.1.3\n\n"
+            "NIKKE 综合助手 0.1.4\n\n"
             "六个入口：帮助｜账号｜我的｜查询｜签到｜兑换\n\n"
             + "\n\n".join(visible)
             + "\n\n分类帮助：/妮姬 帮助 账号|查询|日常"
@@ -384,23 +391,33 @@ class NikkePlugin(Star):
             matches = self._find_directory(name)
             if not matches:
                 raise ValueError("没有找到该妮姬")
+            if len(matches) > 1:
+                candidates = "\n".join(
+                    f"{index}. {item.get('name_cn') or item.get('name_en') or item.get('name_code')}"
+                    for index, item in enumerate(matches[:10], 1)
+                )
+                suffix = "\n候选过多，请继续补全名称。" if len(matches) > 10 else ""
+                yield event.plain_result(
+                    "找到多个角色，请输入更完整的名称：\n\n"
+                    + candidates
+                    + suffix
+                )
+                return
             target = matches[0]
-            roster = await self.client.get_roster(account, True)
             code = str(target.get("name_code", ""))
-            item = next((x for x in roster if str(x.get("name_code", "")) == code), None)
-            if not item:
-                raise ValueError("该账号未持有这名妮姬")
-            rows = [
-                ("等级 / 战力", f"Lv.{item.get('lv', 1)} / {item.get('combat', 0)}"),
-                ("技能", f"{item.get('skill1_lv', 1)} / {item.get('skill2_lv', 1)} / {item.get('ulti_skill_lv', 1)}"),
-                ("突破 / 核心", f"{item.get('grade', 0)} / {item.get('core', 0)}"),
-                ("好感度", str(item.get("attractive_lv", "未知"))),
-                ("收藏品", f"{item.get('favorite_item_tid', 0)}  Lv.{item.get('favorite_item_lv', 0)}"),
-                ("魔方", f"{item.get('harmony_cube_tid', 0)}  Lv.{item.get('harmony_cube_lv', 0)}"),
-                ("AEL", str(self.client.calculate_ael(item))),
-            ]
-            path = self.renderer.render(target.get("name_cn") or target.get("name_en") or name, "个人练度详情", rows)
+            payload = await self.client.get_character_detail(account, code)
+            card = self.character_builder.build(
+                account=account,
+                directory=target,
+                payload=payload,
+                fetched_at=datetime.now().strftime("%Y-%m-%d %H:%M"),
+                plugin_version="0.1.4",
+            )
+            path = self.character_renderer.render_character(card)
             yield event.image_result(path)
+        except CookieExpired:
+            self.store.mark_cookie_invalid(self._qq_id(event))
+            yield event.plain_result("登录状态已失效，请重新发送 /妮姬 账号 绑定。")
         except Exception as exc:
             yield event.plain_result(f"查询失败：{exc}")
 
@@ -687,7 +704,7 @@ class NikkePlugin(Star):
             return
         accounts = self.store.list_accounts(with_cookie=False)
         yield event.plain_result(
-            f"NIKKE插件 0.1.3\n账号：{len(accounts)}\n目录：{len(self._directory)}\n"
+            f"NIKKE插件 0.1.4\n账号：{len(accounts)}\n目录：{len(self._directory)}\n"
             f"绑定服务：{self.web_host}:{self.web_port}\n"
             f"自动签到：{'启用' if self.config.get('enable_daily_actions', False) else '关闭'}\n"
             f"CDK兑换：{'启用' if self.config.get('enable_cdk_redemption', False) else '关闭'}"
