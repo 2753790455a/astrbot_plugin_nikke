@@ -132,6 +132,17 @@ class NikkePlugin(Star):
         term = query.strip().casefold()
         if not term:
             return []
+        exact = [
+            item
+            for item in self._directory
+            if term in {
+                str(item.get("name_cn", "")).strip().casefold(),
+                str(item.get("name_en", "")).strip().casefold(),
+                str(item.get("name_code", "")).strip().casefold(),
+            }
+        ]
+        if exact:
+            return exact
         return [
             item
             for item in self._directory

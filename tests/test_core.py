@@ -518,7 +518,7 @@ class CommandRoutingTests(unittest.IsolatedAsyncioTestCase):
             {"name_code": 1, "name_cn": "爱丽丝", "name_en": "Alice"},
             {"name_code": 2, "name_cn": "爱丽丝：仙境兔女郎", "name_en": "Alice: Wonderland Bunny"},
         ]
-        result = [item async for item in plugin.character(Event(), "爱丽丝")]
+        result = [item async for item in plugin.character(Event(), "丽丝")]
         self.assertEqual(len(result), 1)
         self.assertIn("找到多个角色", result[0])
         self.assertIn("爱丽丝：仙境兔女郎", result[0])
