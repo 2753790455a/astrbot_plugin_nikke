@@ -248,6 +248,42 @@ class NikkeStore:
         except sqlite3.IntegrityError:
             return False
 
+    def get_run(self, run_key: str) -> dict[str, Any] | None:
+        with self._lock, self._connect() as conn:
+            row = conn.execute(
+                "SELECT run_key,qq_id,action,status,detail,created_at FROM action_runs WHERE run_key=?",
+                (run_key,),
+            ).fetchone()
+        return dict(row) if row else None
+
+    def retry_run(
+        self,
+        run_key: str,
+        statuses: set[str],
+        *,
+        stale_after: int = 0,
+    ) -> bool:
+        """原子重领失败任务；也可回收超过指定秒数的运行中任务。"""
+        allowed = sorted(str(status) for status in statuses)
+        conditions: list[str] = []
+        params: list[Any] = []
+        if allowed:
+            conditions.append("status IN (" + ",".join("?" for _ in allowed) + ")")
+            params.extend(allowed)
+        now = int(time.time())
+        if stale_after > 0:
+            conditions.append("(status='running' AND created_at<=?)")
+            params.append(now - stale_after)
+        if not conditions:
+            return False
+        with self._lock, self._connect() as conn:
+            cursor = conn.execute(
+                "UPDATE action_runs SET status='running',detail='',created_at=? "
+                "WHERE run_key=? AND (" + " OR ".join(conditions) + ")",
+                (now, run_key, *params),
+            )
+        return cursor.rowcount == 1
+
     def finish_run(self, run_key: str, status: str, detail: str = "") -> None:
         with self._lock, self._connect() as conn:
             conn.execute(

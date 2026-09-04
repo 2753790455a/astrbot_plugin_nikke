@@ -26,6 +26,7 @@ CHARACTERS = "/api/game/proxy/Game/GetUserCharacters"
 CHARACTER_DETAILS = "/api/game/proxy/Game/GetUserCharacterDetails"
 TASK_LIST = "/api/lip/proxy/lipass/Points/GetTaskListWithStatusV2"
 DAILY_CHECK_IN = "/api/lip/proxy/lipass/Points/DailyCheckIn"
+CDK_REDEEM = "/api/game/proxy/Game/RecordCdkRedemption"
 
 NIKKE_DIRECTORY_ZH = "https://sg-tools-cdn.blablalink.com/jz-26/ww-14/c4619ec83335bcfd7b23e43600520dc7.json"
 NIKKE_DIRECTORY_EN = "https://sg-tools-cdn.blablalink.com/yl-57/hd-03/1bf030193826e243c2e195f951a4be00.json"
@@ -50,6 +51,14 @@ class ValidationResult:
     role_name: str = ""
     nickname: str = ""
     area_id: str = ""
+
+
+@dataclass(slots=True, frozen=True)
+class CdkRedemptionResult:
+    success: bool
+    terminal: bool
+    message: str
+    code: str = ""
 
 
 class BlaBlaClient:
@@ -404,6 +413,29 @@ class BlaBlaClient:
         if last_error:
             raise last_error
         raise BlaBlaError("签到后状态未完成", endpoint="DailyCheckIn")
+
+    async def redeem_cdk(self, account: dict[str, Any], code: str) -> CdkRedemptionResult:
+        """使用已绑定账号兑换国际服CDK，不对写请求自动重试。"""
+        error_messages = {
+            "1302009": "账号兑换次数已达上限",
+            "1302015": "兑换码无效或已过期",
+            "1302016": "该账号已经兑换过此码",
+            "1302017": "兑换码全服可用次数已耗尽",
+        }
+        try:
+            await self._community_request(
+                "POST",
+                CDK_REDEEM,
+                account,
+                payload={"cdkey": code},
+            )
+        except BlaBlaError as exc:
+            if exc.code == "300001":
+                raise CookieExpired("登录状态已失效，请重新绑定", exc.code, exc.endpoint) from exc
+            if exc.code in error_messages:
+                return CdkRedemptionResult(False, True, error_messages[exc.code], exc.code)
+            raise
+        return CdkRedemptionResult(True, True, "兑换成功", "0")
 
     @staticmethod
     def calculate_ael(character: dict[str, Any]) -> float:

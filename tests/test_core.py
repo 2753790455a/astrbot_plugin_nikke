@@ -8,7 +8,12 @@ import time
 import unittest
 from pathlib import Path
 
-from astrbot_plugin_nikke.client import BlaBlaClient, BlaBlaError
+from astrbot_plugin_nikke.client import (
+    BlaBlaClient,
+    BlaBlaError,
+    CdkRedemptionResult,
+    CookieExpired,
+)
 from astrbot_plugin_nikke.renderer import CardRenderer
 from astrbot_plugin_nikke.storage import NikkeStore
 from astrbot_plugin_nikke.web_service import BindingWebService
@@ -189,6 +194,19 @@ class CommunitySigninClient(BlaBlaClient):
         }
 
 
+class CdkClient(BlaBlaClient):
+    def __init__(self, result=None):
+        super().__init__(5)
+        self.result = result
+        self.calls = []
+
+    async def _community_request(self, method, path, account, *, params=None, payload=None):
+        self.calls.append((method, path, payload))
+        if isinstance(self.result, Exception):
+            raise self.result
+        return self.result or {"code": 0, "msg": "ok", "data": {}}
+
+
 class StoreTests(unittest.TestCase):
     def test_single_use_and_encryption(self):
         with tempfile.TemporaryDirectory() as td:
@@ -199,8 +217,11 @@ class StoreTests(unittest.TestCase):
             )
             self.assertEqual(qq_id, "10001")
             self.assertEqual(store.get_account("10001")["cookie"], VALID_COOKIE)
-            with sqlite3.connect(Path(td) / "nikke.sqlite3") as conn:
+            conn = sqlite3.connect(Path(td) / "nikke.sqlite3")
+            try:
                 encrypted = conn.execute("SELECT cookie_cipher FROM accounts").fetchone()[0]
+            finally:
+                conn.close()
             self.assertNotIn(b"secret-token", encrypted)
             with self.assertRaises(ValueError):
                 store.consume_bind_session(
@@ -221,6 +242,16 @@ class StoreTests(unittest.TestCase):
             store = NikkeStore(td)
             self.assertTrue(store.claim_run("2026-09-05:1:daily", "1", "daily"))
             self.assertFalse(store.claim_run("2026-09-05:1:daily", "1", "daily"))
+
+    def test_failed_run_can_be_retried_without_duplication(self):
+        with tempfile.TemporaryDirectory() as td:
+            store = NikkeStore(td)
+            key = "cdk:1:digest"
+            self.assertTrue(store.claim_run(key, "1", "cdk"))
+            store.finish_run(key, "failed", "请求失败")
+            self.assertTrue(store.retry_run(key, {"failed"}, stale_after=120))
+            self.assertEqual(store.get_run(key)["status"], "running")
+            self.assertFalse(store.retry_run(key, {"failed"}, stale_after=120))
 
 
 class ClientTests(unittest.IsolatedAsyncioTestCase):
@@ -243,6 +274,34 @@ class ClientTests(unittest.IsolatedAsyncioTestCase):
         result = await client.perform_daily_signin(self._community_account())
         self.assertEqual(result, "今日已经签到")
         self.assertEqual([call[0] for call in client.calls], ["GET"])
+
+    async def test_cdk_redeem_uses_official_endpoint_once(self):
+        from astrbot_plugin_nikke.client import CDK_REDEEM
+
+        client = CdkClient()
+        result = await client.redeem_cdk(self._community_account(), "TESTCODE")
+        self.assertTrue(result.success)
+        self.assertEqual(client.calls, [("POST", CDK_REDEEM, {"cdkey": "TESTCODE"})])
+
+    async def test_cdk_terminal_errors_are_localized(self):
+        cases = {
+            "1302009": "次数已达上限",
+            "1302015": "无效或已过期",
+            "1302016": "已经兑换过",
+            "1302017": "全服可用次数已耗尽",
+        }
+        for code, message in cases.items():
+            with self.subTest(code=code):
+                client = CdkClient(BlaBlaError("upstream", code, "RecordCdkRedemption"))
+                result = await client.redeem_cdk(self._community_account(), "TESTCODE")
+                self.assertFalse(result.success)
+                self.assertTrue(result.terminal)
+                self.assertIn(message, result.message)
+
+    async def test_cdk_cookie_expired_is_preserved(self):
+        client = CdkClient(BlaBlaError("expired", "300001", "RecordCdkRedemption"))
+        with self.assertRaises(CookieExpired):
+            await client.redeem_cdk(self._community_account(), "TESTCODE")
 
     async def test_cookie_expired_is_preserved(self):
         class ExpiredClient(BlaBlaClient):
@@ -376,21 +435,118 @@ class ExtensionTests(unittest.TestCase):
 
 
 class HelpTests(unittest.TestCase):
-    def test_help_lists_categories_and_safety_state(self):
+    def test_help_lists_six_chinese_entries_and_english_aliases(self):
         from astrbot_plugin_nikke.main import NikkePlugin
 
         text = NikkePlugin._help_text()
+        self.assertIn("六个入口：帮助｜账号｜我的｜查询｜签到｜兑换", text)
         self.assertIn("/nikke bind", text)
         self.assertIn("/nikke roster", text)
-        self.assertIn("/nikke claim", text)
-        self.assertIn("当前安全禁用", text)
+        self.assertIn("/nikke cdk", text)
+        self.assertNotIn("/nikke export", text)
+        self.assertNotIn("【管理员】", text)
 
     def test_help_category_alias(self):
         from astrbot_plugin_nikke.main import NikkePlugin
 
         text = NikkePlugin._help_text("account")
-        self.assertIn("【账号绑定】", text)
+        self.assertIn("【账号】", text)
         self.assertNotIn("【管理员】", text)
+
+    def test_admin_help_is_permission_scoped(self):
+        from astrbot_plugin_nikke.main import NikkePlugin
+
+        self.assertEqual(NikkePlugin._help_text("管理"), "管理指令仅对管理员显示。")
+        self.assertIn("【管理员】", NikkePlugin._help_text("管理", True))
+
+    def test_removed_placeholders_are_not_registered(self):
+        root = Path(__file__).resolve().parents[1]
+        source = (root / "main.py").read_text(encoding="utf-8")
+        self.assertIn('@filter.command("妮姬", alias={"nikke"})', source)
+        for command in ("skill", "advise", "stage", "tower", "cube", "collection", "image", "export"):
+            self.assertNotIn(f'command("nikke {command}")', source)
+
+
+class CommandRoutingTests(unittest.IsolatedAsyncioTestCase):
+    async def test_chinese_and_legacy_commands_share_one_root_router(self):
+        from astrbot_plugin_nikke.main import NikkePlugin
+
+        plugin = NikkePlugin.__new__(NikkePlugin)
+        calls = []
+
+        async def account(event, action="", value=""):
+            calls.append(("account", action, value))
+            yield "账号结果"
+
+        async def roster(event):
+            calls.append(("roster",))
+            yield "练度结果"
+
+        plugin.account = account
+        plugin.roster = roster
+        event = object()
+
+        chinese = [item async for item in plugin.nikke(event, "账号", "绑定", "")]
+        legacy = [item async for item in plugin.nikke(event, "roster", "", "")]
+        self.assertEqual(chinese, ["账号结果"])
+        self.assertEqual(legacy, ["练度结果"])
+        self.assertEqual(calls, [("account", "绑定", ""), ("roster",)])
+
+    async def test_group_cdk_is_idempotent_and_never_persists_plaintext(self):
+        from astrbot_plugin_nikke.main import NikkePlugin
+
+        class Event:
+            def get_sender_id(self):
+                return "10001"
+
+            def plain_result(self, text):
+                return text
+
+        class Store:
+            def __init__(self):
+                self.runs = {}
+
+            def get_account(self, qq_id):
+                return {"qq_id": qq_id, "cookie": VALID_COOKIE}
+
+            def get_run(self, key):
+                return self.runs.get(key)
+
+            def claim_run(self, key, qq_id, action):
+                if key in self.runs:
+                    return False
+                self.runs[key] = {"status": "running", "detail": ""}
+                return True
+
+            def retry_run(self, key, statuses, stale_after=0):
+                return False
+
+            def finish_run(self, key, status, detail=""):
+                self.runs[key] = {"status": status, "detail": detail}
+
+            def mark_cookie_invalid(self, qq_id):
+                raise AssertionError("不应失效")
+
+        class Client:
+            def __init__(self):
+                self.calls = 0
+
+            async def redeem_cdk(self, account, code):
+                self.calls += 1
+                return CdkRedemptionResult(True, True, "兑换成功", "0")
+
+        plugin = NikkePlugin.__new__(NikkePlugin)
+        plugin.config = {"enable_cdk_redemption": True}
+        plugin.store = Store()
+        plugin.client = Client()
+        code = "SECRETCODE123"
+        first = [item async for item in plugin.cdk(Event(), code)]
+        second = [item async for item in plugin.cdk(Event(), code)]
+        persisted = json.dumps(plugin.store.runs, ensure_ascii=False)
+        self.assertEqual(plugin.client.calls, 1)
+        self.assertEqual(first, second)
+        self.assertNotIn(code, persisted)
+        self.assertNotIn(code, "".join(first))
 
 
 if __name__ == "__main__":

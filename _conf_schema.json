@@ -58,5 +58,10 @@
     "description": "启用已验证的社区签到与领奖接口",
     "type": "bool",
     "default": false
+  },
+  "enable_cdk_redemption": {
+    "description": "启用国际服CDK真实兑换；群聊命令会公开兑换码",
+    "type": "bool",
+    "default": false
   }
 }

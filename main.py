@@ -4,18 +4,18 @@
 from __future__ import annotations
 
 import asyncio
-import json
+import hashlib
 import os
 import random
+import re
 import secrets
-import time
 import zipfile
 from datetime import datetime
 from pathlib import Path
 
 from astrbot.api import logger
 from astrbot.api.event import AstrMessageEvent, MessageChain, filter
-from astrbot.api.message_components import Image, Plain
+from astrbot.api.message_components import Image
 from astrbot.api.star import Context, Star, register
 
 from .client import BlaBlaClient, BlaBlaError, CookieExpired
@@ -28,7 +28,7 @@ from .web_service import BindingWebService
     "astrbot_plugin_nikke",
     "September",
     "NIKKE BlaBlaLink 账号练度、资料查询与每日汇总",
-    "0.1.2",
+    "0.1.3",
     "https://github.com/September6969/astrbot_plugin_nikke",
 )
 class NikkePlugin(Star):
@@ -39,8 +39,6 @@ class NikkePlugin(Star):
         self.plugin_dir = Path(__file__).resolve().parent
         self.data_dir = Path("data") / "nikke"
         self.data_dir.mkdir(parents=True, exist_ok=True)
-        self.export_dir = self.data_dir / "exports"
-        self.export_dir.mkdir(parents=True, exist_ok=True)
         self.extension_zip = self.data_dir / "nikke-bind-extension.zip"
         self.store = NikkeStore(self.data_dir)
         self.client = BlaBlaClient(
@@ -114,7 +112,7 @@ class NikkePlugin(Star):
     def _account_or_error(self, event: AstrMessageEvent) -> dict:
         account = self.store.get_account(self._qq_id(event))
         if not account:
-            raise ValueError("尚未绑定账号，请先发送 /nikke bind")
+            raise ValueError("尚未绑定账号，请先私聊发送 /妮姬 账号 绑定")
         return account
 
     def _name_map(self) -> dict[str, str]:
@@ -125,6 +123,8 @@ class NikkePlugin(Star):
 
     def _find_directory(self, query: str) -> list[dict]:
         term = query.strip().casefold()
+        if not term:
+            return []
         return [
             item
             for item in self._directory
@@ -134,94 +134,173 @@ class NikkePlugin(Star):
         ]
 
     @staticmethod
-    def _help_text(category: str = "") -> str:
+    def _help_text(category: str = "", include_admin: bool = False) -> str:
         sections = {
             "账号": (
-                "【账号绑定】\n"
-                "/nikke bind — 私聊生成10分钟一次性绑定链接\n"
-                "/nikke status — 查看绑定和Cookie状态\n"
-                "/nikke me — 查看指挥官资料\n"
-                "/nikke unbind — 删除自己的绑定与Cookie"
+                "【账号】\n"
+                "/妮姬 账号 — 查看绑定状态\n"
+                "/妮姬 账号 绑定　(/nikke bind)\n"
+                "/妮姬 账号 解绑　(/nikke unbind)\n"
+                "/妮姬 账号 汇总 开|关　(/nikke push on|off)"
             ),
-            "练度": (
-                "【个人练度】\n"
-                "/nikke roster — 生成妮姬练度总表\n"
-                "/nikke progress — 查看同步器、前哨和战役进度\n"
-                "/nikke character <名称> — 查看单个妮姬详情\n"
-                "/nikke export — 导出个人练度JSON"
-            ),
-            "资料": (
-                "【资料查询】\n"
-                "/nikke info <名称> — 妮姬基础资料\n"
-                "/nikke skill <名称> — 技能资料入口\n"
-                "/nikke advise <名称> — 面谈资料入口\n"
-                "/nikke stage <编号> — 关卡资料入口\n"
-                "/nikke tower <类型> — 企业塔资料入口\n"
-                "/nikke cube <名称> — 魔方资料入口\n"
-                "/nikke collection <名称> — 收藏品资料入口\n"
-                "/nikke image <名称> [类型] — 图片资料入口"
+            "查询": (
+                "【查询】\n"
+                "/妮姬 我的　(/nikke me)\n"
+                "/妮姬 查询 练度 [角色名]　(/nikke roster、/nikke character)\n"
+                "/妮姬 查询 资料 <角色名>　(/nikke info)"
             ),
             "日常": (
-                "【日常与推送】\n"
-                "/nikke daily — 检查自己的登录和每日状态\n"
-                "/nikke push on|off — 加入或退出群汇总\n"
-                "/nikke claim — 奖励领取（当前安全禁用）\n"
-                "/nikke cdk <兑换码> — 显示官方手动兑换入口"
+                "【日常】\n"
+                "/妮姬 签到　(/nikke daily、/nikke claim)\n"
+                "/妮姬 签到 状态 — 只查询、不提交\n"
+                "/妮姬 兑换 <CDK>　(/nikke cdk)\n"
+                "注意：群聊发送兑换命令会公开兑换码。"
             ),
             "管理": (
                 "【管理员】\n"
-                "/nikke group set — 将当前群设为汇总目标\n"
-                "/nikke schedule HH:MM — 设置每日检查时间\n"
-                "/nikke summary HH:MM — 设置汇总发送时间\n"
-                "/nikke run — 立即执行汇总\n"
-                "/nikke health — 查看插件健康状态"
+                "/妮姬 管理 设群\n"
+                "/妮姬 管理 任务时间 HH:MM\n"
+                "/妮姬 管理 汇总时间 HH:MM\n"
+                "/妮姬 管理 执行\n"
+                "/妮姬 管理 健康"
             ),
         }
         aliases = {
             "account": "账号", "bind": "账号",
-            "roster": "练度", "progress": "练度",
-            "info": "资料", "data": "资料",
+            "query": "查询", "roster": "查询", "info": "查询", "data": "查询",
             "daily": "日常", "push": "日常",
             "admin": "管理",
         }
         selected = aliases.get(category.strip().lower(), category.strip())
         if selected in sections:
-            return sections[selected] + "\n\n发送 /nikke help 查看全部指令。"
+            if selected == "管理" and not include_admin:
+                return "管理指令仅对管理员显示。"
+            return sections[selected] + "\n\n发送 /妮姬 帮助 查看主菜单。"
+        visible = [sections["账号"], sections["查询"], sections["日常"]]
+        if include_admin:
+            visible.append(sections["管理"])
         return (
-            "NIKKE 综合助手 0.1.2\n\n"
-            + "\n\n".join(sections.values())
-            + "\n\n帮助分类：/nikke help 账号|练度|资料|日常|管理\n"
-            "安全提示：不要在群里发送Cookie、密码或绑定链接。"
+            "NIKKE 综合助手 0.1.3\n\n"
+            "六个入口：帮助｜账号｜我的｜查询｜签到｜兑换\n\n"
+            + "\n\n".join(visible)
+            + "\n\n分类帮助：/妮姬 帮助 账号|查询|日常"
+            + ("|管理" if include_admin else "")
+            + "\n安全提示：不要发送Cookie、密码或转发绑定链接。"
         )
 
-    @filter.command("nikke help")
-    async def nikke_help(self, event: AstrMessageEvent, category: str = ""):
-        """查看全部或分类的NIKKE综合助手指令。"""
-        yield event.plain_result(self._help_text(category))
+    @filter.command("妮姬", alias={"nikke"})
+    async def nikke(
+        self,
+        event: AstrMessageEvent,
+        command: str = "",
+        arg1: str = "",
+        arg2: str = "",
+    ):
+        """NIKKE 中文精简指令入口。"""
+        command_key = command.strip().casefold()
+        if command_key in {"", "帮助", "help"}:
+            async for result in self.nikke_help(event, arg1):
+                yield result
+            return
+        if command_key in {"账号", "account"}:
+            async for result in self.account(event, arg1, arg2):
+                yield result
+            return
+        if command_key in {"我的", "me", "progress"}:
+            async for result in self.me(event):
+                yield result
+            return
+        if command_key in {"查询", "query"}:
+            async for result in self.query(event, arg1, arg2):
+                yield result
+            return
+        if command_key in {"签到", "daily", "claim"}:
+            async for result in self.daily(event, arg1):
+                yield result
+            return
+        if command_key in {"兑换", "cdk"}:
+            if not arg1:
+                yield event.plain_result("用法：/妮姬 兑换 <CDK>")
+                return
+            async for result in self.cdk(event, arg1):
+                yield result
+            return
+        if command_key in {"管理", "admin"}:
+            async for result in self.admin(event, arg1, arg2):
+                yield result
+            return
 
-    @filter.command("nikke bind")
+        # 兼容0.1.2及更早版本的英文平铺指令。
+        legacy = {
+            "bind": (self.bind, (event,)),
+            "unbind": (self.unbind, (event,)),
+            "status": (self.status, (event,)),
+            "roster": (self.roster, (event,)),
+            "character": (self.character, (event, arg1)),
+            "info": (self.info, (event, arg1)),
+            "push": (self.push, (event, arg1)),
+            "group": (self.group_set, (event, arg1)),
+            "schedule": (self.schedule, (event, arg1)),
+            "summary": (self.summary, (event, arg1)),
+            "run": (self.run, (event,)),
+            "health": (self.health, (event,)),
+        }
+        target = legacy.get(command_key)
+        if target:
+            handler, args = target
+            async for result in handler(*args):
+                yield result
+            return
+        yield event.plain_result("未知指令。发送 /妮姬 帮助 查看可用功能。")
+
+    async def nikke_help(self, event: AstrMessageEvent, category: str = ""):
+        """查看精简后的中文指令。"""
+        yield event.plain_result(self._help_text(category, self._is_admin(event)))
+
+    async def account(self, event: AstrMessageEvent, action: str = "", value: str = ""):
+        """管理账号绑定、状态和每日汇总。"""
+        action_key = action.strip().casefold()
+        if action_key in {"", "状态", "status"}:
+            async for result in self.status(event):
+                yield result
+            return
+        if action_key in {"绑定", "bind"}:
+            async for result in self.bind(event):
+                yield result
+            return
+        if action_key in {"解绑", "unbind"}:
+            async for result in self.unbind(event):
+                yield result
+            return
+        if action_key in {"汇总", "push"}:
+            if not value:
+                yield event.plain_result("用法：/妮姬 账号 汇总 开|关")
+                return
+            async for result in self.push(event, value):
+                yield result
+            return
+        yield event.plain_result("用法：/妮姬 账号 [绑定|状态|解绑|汇总 开|关]")
+
     async def bind(self, event: AstrMessageEvent):
-        """生成十分钟有效的安全绑定链接。"""
+        """兼容旧版英文绑定指令。"""
         if not event.is_private_chat() and not bool(self.config.get("allow_group_bind", False)):
-            yield event.plain_result("为防止绑定链接被他人抢先使用，请私聊机器人发送 /nikke bind。")
+            yield event.plain_result("为防止绑定链接被他人抢先使用，请私聊机器人发送 /妮姬 账号 绑定。")
             return
         token = secrets.token_urlsafe(36)
         self.store.create_bind_session(token, self._qq_id(event), 600)
         url = f"{self.public_base_url}/bind/{token}"
         yield event.plain_result(f"安全绑定链接（10分钟、仅可使用一次）：\n{url}\n请勿转发。账号密码只在BlaBlaLink官网输入。")
 
-    @filter.command("nikke unbind")
     async def unbind(self, event: AstrMessageEvent):
         """解除自己的BlaBlaLink账号。"""
         removed = self.store.delete_account(self._qq_id(event))
         yield event.plain_result("已解除绑定。" if removed else "当前QQ尚未绑定。")
 
-    @filter.command("nikke status")
     async def status(self, event: AstrMessageEvent):
         """检查绑定和Cookie状态。"""
         account = self.store.get_account(self._qq_id(event), with_cookie=False)
         if not account:
-            yield event.plain_result("未绑定，请发送 /nikke bind")
+            yield event.plain_result("未绑定，请私聊发送 /妮姬 账号 绑定。")
             return
         state = "有效" if account["cookie_valid"] else "已失效，请重新绑定"
         yield event.plain_result(
@@ -230,7 +309,6 @@ class NikkePlugin(Star):
             f"每日汇总：{'开启' if account['push_enabled'] else '关闭'}"
         )
 
-    @filter.command("nikke me")
     async def me(self, event: AstrMessageEvent):
         """生成个人账号概览卡。"""
         try:
@@ -249,11 +327,30 @@ class NikkePlugin(Star):
             yield event.image_result(path)
         except CookieExpired:
             self.store.mark_cookie_invalid(self._qq_id(event))
-            yield event.plain_result("登录状态已失效，请重新发送 /nikke bind")
+            yield event.plain_result("登录状态已失效，请重新发送 /妮姬 账号 绑定。")
         except (BlaBlaError, ValueError, RuntimeError) as exc:
             yield event.plain_result(f"查询失败：{exc}")
 
-    @filter.command("nikke roster")
+    async def query(self, event: AstrMessageEvent, kind: str = "", name: str = ""):
+        """查询个人练度或公开角色资料。"""
+        kind_key = kind.strip().casefold()
+        if kind_key in {"练度", "roster", "character"}:
+            if name:
+                async for result in self.character(event, name):
+                    yield result
+            else:
+                async for result in self.roster(event):
+                    yield result
+            return
+        if kind_key in {"资料", "info"}:
+            if not name:
+                yield event.plain_result("用法：/妮姬 查询 资料 <角色名>")
+                return
+            async for result in self.info(event, name):
+                yield result
+            return
+        yield event.plain_result("用法：/妮姬 查询 练度 [角色名] 或 /妮姬 查询 资料 <角色名>")
+
     async def roster(self, event: AstrMessageEvent):
         """生成自己的妮姬练度表。"""
         try:
@@ -272,15 +369,16 @@ class NikkePlugin(Star):
             logger.warning(f"[NIKKE] roster 查询失败: {type(exc).__name__}: {exc}")
             yield event.plain_result(f"练度查询失败：{exc}")
 
-    @filter.command("nikke progress")
     async def progress(self, event: AstrMessageEvent):
         """查看同步器、前哨和主线进度。"""
         async for result in self.me(event):
             yield result
 
-    @filter.command("nikke character")
     async def character(self, event: AstrMessageEvent, name: str):
         """查询自己指定妮姬的练度。"""
+        if not name.strip():
+            yield event.plain_result("用法：/妮姬 查询 练度 <角色名>")
+            return
         try:
             account = self._account_or_error(event)
             matches = self._find_directory(name)
@@ -306,22 +404,11 @@ class NikkePlugin(Star):
         except Exception as exc:
             yield event.plain_result(f"查询失败：{exc}")
 
-    @filter.command("nikke export")
-    async def export(self, event: AstrMessageEvent):
-        """导出个人练度JSON。"""
-        try:
-            account = self._account_or_error(event)
-            characters = await self.client.get_roster(account, True)
-            safe_id = self._qq_id(event)
-            path = self.export_dir / f"nikke-{safe_id}-{int(time.time())}.json"
-            path.write_text(json.dumps(characters, ensure_ascii=False, indent=2), encoding="utf-8")
-            yield event.plain_result(f"JSON已生成：{path.name}\n当前适配器不支持直接发送文件时，请联系管理员从服务器下载。")
-        except Exception as exc:
-            yield event.plain_result(f"导出失败：{exc}")
-
-    @filter.command("nikke info")
     async def info(self, event: AstrMessageEvent, name: str):
         """查询妮姬基础资料。"""
+        if not name.strip():
+            yield event.plain_result("用法：/妮姬 查询 资料 <角色名>")
+            return
         matches = self._find_directory(name)
         if not matches:
             yield event.plain_result("没有找到该妮姬。")
@@ -337,59 +424,6 @@ class NikkePlugin(Star):
         ]
         path = self.renderer.render(item.get("name_cn") or item.get("name_en") or name, "妮姬基础资料", rows)
         yield event.image_result(path)
-
-    @filter.command("nikke skill")
-    async def skill(self, event: AstrMessageEvent, name: str):
-        """提供妮姬技能资料入口。"""
-        matches = self._find_directory(name)
-        if not matches:
-            yield event.plain_result("没有找到该妮姬。")
-            return
-        item = matches[0]
-        rows = [
-            ("角色", str(item.get("name_cn") or item.get("name_en"))),
-            ("状态", "首版仅展示官方目录字段；技能全文数据源许可核对后启用"),
-            ("BlaBlaLink", "https://www.blablalink.com/shiftyspad/nikke-list/all"),
-        ]
-        yield event.image_result(self.renderer.render("技能资料", "开放数据优先", rows))
-
-    async def _reference_card(self, event: AstrMessageEvent, kind: str, query: str):
-        rows = [
-            ("查询", query),
-            ("状态", "数据源许可核对中，当前不复制第三方攻略正文"),
-            ("官方社区", "https://www.blablalink.com/"),
-        ]
-        yield event.image_result(self.renderer.render(kind, "资料导航", rows))
-
-    @filter.command("nikke advise")
-    async def advise(self, event: AstrMessageEvent, name: str):
-        """查询面谈资料入口。"""
-        async for result in self._reference_card(event, "面谈资料", name): yield result
-
-    @filter.command("nikke stage")
-    async def stage(self, event: AstrMessageEvent, stage_id: str):
-        """查询关卡资料入口。"""
-        async for result in self._reference_card(event, "关卡资料", stage_id): yield result
-
-    @filter.command("nikke tower")
-    async def tower(self, event: AstrMessageEvent, tower_type: str):
-        """查询企业塔资料入口。"""
-        async for result in self._reference_card(event, "企业塔资料", tower_type): yield result
-
-    @filter.command("nikke cube")
-    async def cube(self, event: AstrMessageEvent, name: str):
-        """查询魔方资料入口。"""
-        async for result in self._reference_card(event, "魔方资料", name): yield result
-
-    @filter.command("nikke collection")
-    async def collection(self, event: AstrMessageEvent, name: str):
-        """查询收藏品资料入口。"""
-        async for result in self._reference_card(event, "收藏品资料", name): yield result
-
-    @filter.command("nikke image")
-    async def image(self, event: AstrMessageEvent, name: str, image_type: str = "头像"):
-        """查询妮姬图片入口。"""
-        async for result in self._reference_card(event, f"妮姬图片 · {image_type}", name): yield result
 
     async def _run_daily_for_account(self, account: dict, day: str) -> tuple[str, str]:
         qq_id = str(account["qq_id"])
@@ -457,64 +491,147 @@ class NikkePlugin(Star):
         path = self.renderer.render_summary([(str(a), str(b)) for a, b in results])
         await self.context.send_message(group_umo, MessageChain([Image.fromFileSystem(path)]))
 
-    @filter.command("nikke daily")
-    async def daily(self, event: AstrMessageEvent):
-        """手动检查自己的每日任务状态。"""
+    async def _daily_status(self, event: AstrMessageEvent):
+        """只读查询当前账号的每日签到状态。"""
+        try:
+            account = self._account_or_error(event)
+            await self.client.get_profile(account)
+            status = await self.client.get_daily_signin(account)
+            if not status["found"]:
+                detail = "未找到签到任务"
+            elif status["completed"]:
+                detail = "今日已签到"
+            else:
+                detail = "今日待签到"
+            yield event.plain_result(detail)
+        except CookieExpired:
+            self.store.mark_cookie_invalid(self._qq_id(event))
+            yield event.plain_result("登录状态已失效，请重新发送 /妮姬 账号 绑定。")
+        except Exception as exc:
+            yield event.plain_result(f"查询失败：{exc}")
+
+    async def daily(self, event: AstrMessageEvent, action: str = ""):
+        """直接签到，或只读查询签到状态。"""
+        action_key = action.strip().casefold()
+        if action_key in {"状态", "status"}:
+            async for result in self._daily_status(event):
+                yield result
+            return
+        if action_key:
+            yield event.plain_result("用法：/妮姬 签到 或 /妮姬 签到 状态")
+            return
+        if not bool(self.config.get("enable_daily_actions", False)):
+            yield event.plain_result("签到写操作当前由管理员关闭；可使用 /妮姬 签到 状态 只读查询。")
+            return
         try:
             account = self._account_or_error(event)
             name, detail = await self._run_daily_for_account(account, datetime.now().strftime("%Y-%m-%d"))
             yield event.plain_result(f"{name}：{detail}")
         except Exception as exc:
-            yield event.plain_result(f"执行失败：{exc}")
-
-    @filter.command("nikke claim")
-    async def claim(self, event: AstrMessageEvent):
-        """领取已满足条件的社区奖励。"""
-        if not bool(self.config.get("enable_daily_actions", False)):
-            yield event.plain_result("签到写操作当前由管理员关闭；可使用 /nikke daily 查看只读状态。")
-            return
-        try:
-            account = self._account_or_error(event)
-            day = datetime.now().strftime("%Y-%m-%d")
-            run_key = f"{day}:{self._qq_id(event)}:signin"
-            status = await self.client.get_daily_signin(account)
-            if status["completed"]:
-                yield event.plain_result("今日已经签到，无需重复执行。")
-                return
-            if not self.store.claim_run(run_key, self._qq_id(event), "signin"):
-                yield event.plain_result("今日签到已经执行或正在执行，不会重复提交。")
-                return
-            try:
-                result = await self.client.perform_daily_signin(account)
-                self.store.finish_run(run_key, "success", result)
-                yield event.plain_result(result)
-            except Exception as exc:
-                self.store.finish_run(run_key, "failed", type(exc).__name__)
-                raise
-        except Exception as exc:
             yield event.plain_result(f"签到失败：{exc}")
 
-    @filter.command("nikke cdk")
-    async def cdk(self, event: AstrMessageEvent, code: str):
-        """打开官方CDK兑换入口。"""
-        masked = code[:2] + "***" + code[-2:] if len(code) > 4 else "***"
-        yield event.plain_result(f"兑换码 {masked} 请在官方入口手动提交：https://www.blablalink.com/cdk\n当前版本不会记录或代提交CDK。")
+    async def claim(self, event: AstrMessageEvent):
+        """兼容旧版英文签到指令。"""
+        async for result in self.daily(event):
+            yield result
 
-    @filter.command("nikke push")
+    @staticmethod
+    def _mask_cdk(code: str) -> str:
+        return code[:2] + "***" + code[-2:] if len(code) > 4 else "***"
+
+    async def cdk(self, event: AstrMessageEvent, code: str):
+        """使用当前绑定账号兑换国际服CDK。"""
+        if not bool(self.config.get("enable_cdk_redemption", False)):
+            yield event.plain_result("CDK真实兑换当前由管理员关闭。")
+            return
+        normalized = code.strip()
+        if not re.fullmatch(r"[A-Za-z0-9_-]{4,64}", normalized):
+            yield event.plain_result("兑换码格式无效：仅支持4至64位字母、数字、下划线或连字符。")
+            return
+        qq_id = self._qq_id(event)
+        masked = self._mask_cdk(normalized)
+        try:
+            account = self._account_or_error(event)
+        except ValueError as exc:
+            yield event.plain_result(str(exc))
+            return
+        digest = hashlib.sha256(normalized.encode("utf-8")).hexdigest()
+        run_key = f"cdk:{qq_id}:{digest}"
+        retryable = {"failed", "unknown", "expired"}
+        existing = self.store.get_run(run_key)
+        if existing and existing["status"] not in retryable:
+            if existing["status"] == "running":
+                if not self.store.retry_run(run_key, retryable, stale_after=120):
+                    yield event.plain_result(f"兑换码 {masked} 正在处理，请勿重复提交。")
+                    return
+            else:
+                yield event.plain_result(existing["detail"] or f"兑换码 {masked} 已处理。")
+                return
+        elif existing:
+            if not self.store.retry_run(run_key, retryable, stale_after=120):
+                yield event.plain_result(f"兑换码 {masked} 正在处理，请稍后再试。")
+                return
+        elif not self.store.claim_run(run_key, qq_id, "cdk"):
+            yield event.plain_result(f"兑换码 {masked} 正在处理，请勿重复提交。")
+            return
+        try:
+            result = await self.client.redeem_cdk(account, normalized)
+            detail = f"兑换码 {masked}：{result.message}"
+            self.store.finish_run(run_key, "success" if result.success else ("terminal" if result.terminal else "unknown"), detail)
+            yield event.plain_result(detail)
+        except CookieExpired:
+            self.store.mark_cookie_invalid(qq_id)
+            self.store.finish_run(run_key, "expired", "登录状态已失效")
+            yield event.plain_result("登录状态已失效，请重新发送 /妮姬 账号 绑定。")
+        except Exception as exc:
+            self.store.finish_run(run_key, "failed", f"兑换码 {masked}：请求失败，可稍后重试")
+            logger.warning(f"[NIKKE] CDK兑换失败: {type(exc).__name__}")
+            yield event.plain_result(f"兑换码 {masked}：请求失败，可稍后重试。")
+
     async def push(self, event: AstrMessageEvent, state: str):
         """开启或关闭每日群汇总。"""
         enabled = state.lower() in {"on", "开", "开启", "1"}
         if state.lower() not in {"on", "off", "开", "关", "开启", "关闭", "1", "0"}:
-            yield event.plain_result("用法：/nikke push on 或 /nikke push off")
+            yield event.plain_result("用法：/妮姬 账号 汇总 开|关")
             return
         changed = self.store.set_push(self._qq_id(event), enabled)
         yield event.plain_result(("每日汇总已开启。" if enabled else "每日汇总已关闭。") if changed else "请先绑定账号。")
 
-    @filter.command("nikke group set")
-    async def group_set(self, event: AstrMessageEvent):
+    async def admin(self, event: AstrMessageEvent, action: str = "", value: str = ""):
+        """管理员配置与运行入口。"""
+        if not self._is_admin(event):
+            yield event.plain_result("仅管理员可使用管理指令。")
+            return
+        action_key = action.strip().casefold()
+        if action_key in {"设群", "group"}:
+            async for result in self.group_set(event):
+                yield result
+            return
+        if action_key in {"任务时间", "schedule"}:
+            async for result in self.schedule(event, value):
+                yield result
+            return
+        if action_key in {"汇总时间", "summary"}:
+            async for result in self.summary(event, value):
+                yield result
+            return
+        if action_key in {"执行", "run"}:
+            async for result in self.run(event):
+                yield result
+            return
+        if action_key in {"健康", "health"}:
+            async for result in self.health(event):
+                yield result
+            return
+        yield event.plain_result("用法：/妮姬 管理 [设群|任务时间 HH:MM|汇总时间 HH:MM|执行|健康]")
+
+    async def group_set(self, event: AstrMessageEvent, action: str = "set"):
         """管理员将当前会话设为每日汇总目标。"""
         if not self._is_admin(event):
             yield event.plain_result("仅管理员可配置汇总群。")
+            return
+        if action.strip().casefold() not in {"", "set", "设群"}:
+            yield event.plain_result("用法：/妮姬 管理 设群")
             return
         self.store.set_setting("summary_group_umo", event.unified_msg_origin)
         yield event.plain_result(f"每日汇总目标已设为当前会话：{event.unified_msg_origin}")
@@ -527,7 +644,6 @@ class NikkePlugin(Star):
             raise ValueError("时间范围错误")
         return h, m
 
-    @filter.command("nikke schedule")
     async def schedule(self, event: AstrMessageEvent, clock: str):
         """管理员设置每日任务开始时间。"""
         if not self._is_admin(event):
@@ -539,9 +655,8 @@ class NikkePlugin(Star):
             self.store.set_setting("daily_minute", m)
             yield event.plain_result(f"每日任务时间已设为 {h:02d}:{m:02d}。")
         except Exception:
-            yield event.plain_result("用法：/nikke schedule HH:MM")
+            yield event.plain_result("用法：/妮姬 管理 任务时间 HH:MM")
 
-    @filter.command("nikke summary")
     async def summary(self, event: AstrMessageEvent, clock: str):
         """管理员设置每日汇总时间。"""
         if not self._is_admin(event):
@@ -553,9 +668,8 @@ class NikkePlugin(Star):
             self.store.set_setting("summary_minute", m)
             yield event.plain_result(f"每日汇总时间已设为 {h:02d}:{m:02d}。")
         except Exception:
-            yield event.plain_result("用法：/nikke summary HH:MM")
+            yield event.plain_result("用法：/妮姬 管理 汇总时间 HH:MM")
 
-    @filter.command("nikke run")
     async def run(self, event: AstrMessageEvent):
         """管理员立即执行并发送汇总。"""
         if not self._is_admin(event):
@@ -566,7 +680,6 @@ class NikkePlugin(Star):
         path = self.renderer.render_summary(results)
         yield event.image_result(path)
 
-    @filter.command("nikke health")
     async def health(self, event: AstrMessageEvent):
         """管理员查看插件健康状态。"""
         if not self._is_admin(event):
@@ -574,8 +687,10 @@ class NikkePlugin(Star):
             return
         accounts = self.store.list_accounts(with_cookie=False)
         yield event.plain_result(
-            f"NIKKE插件 0.1.2\n账号：{len(accounts)}\n目录：{len(self._directory)}\n"
-            f"绑定服务：{self.web_host}:{self.web_port}\n自动写操作：{'启用' if self.config.get('enable_daily_actions', False) else '关闭'}"
+            f"NIKKE插件 0.1.3\n账号：{len(accounts)}\n目录：{len(self._directory)}\n"
+            f"绑定服务：{self.web_host}:{self.web_port}\n"
+            f"自动签到：{'启用' if self.config.get('enable_daily_actions', False) else '关闭'}\n"
+            f"CDK兑换：{'启用' if self.config.get('enable_cdk_redemption', False) else '关闭'}"
         )
 
     async def terminate(self):
