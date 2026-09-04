@@ -67,7 +67,7 @@ nikke.example.com {
 
 ### `MetaData no user account`
 
-先确认官网个人页可以看到 NIKKE 等级和战役数据，再重新安装最新版绑定扩展并创建新链接。0.1.1 起扩展只读取浏览器实际会发送给 `www.blablalink.com` 的 Cookie，服务端也会执行 `game_openid` 和正式 `intl_openid` 后备识别。
+先确认官网个人页可以看到 NIKKE 等级和战役数据，再重新安装最新版绑定扩展并创建新链接。0.1.1 起扩展只读取浏览器实际会发送给 `www.blablalink.com` 的 Cookie，服务端也会执行 `game_openid` 和正式 `intl_openid` 后备识别。0.1.2 起会捕获官网请求中的 `x-common-params`，用于只读签到状态和受开关保护的签到接口。
 
 管理员可检查 AstrBot 日志中的 `[NIKKE诊断]` 行。日志只包含接口名、业务码、响应字段和 Cookie 名称；不要要求用户发送 Cookie 值或 Cookie-Editor 导出文件。
 

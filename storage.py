@@ -84,6 +84,11 @@ class NikkeStore:
                 CREATE INDEX IF NOT EXISTS idx_run_created ON action_runs(created_at);
                 """
             )
+            columns = {row[1] for row in conn.execute("PRAGMA table_info(accounts)")}
+            if "xcommon_cipher" not in columns:
+                conn.execute("ALTER TABLE accounts ADD COLUMN xcommon_cipher BLOB NOT NULL DEFAULT X''")
+            if "user_agent" not in columns:
+                conn.execute("ALTER TABLE accounts ADD COLUMN user_agent TEXT NOT NULL DEFAULT ''")
 
     @staticmethod
     def token_hash(token: str) -> str:
@@ -134,10 +139,13 @@ class NikkeStore:
         nickname: str,
         role_name: str,
         area_id: str,
+        x_common_params: str = "",
+        user_agent: str = "",
     ) -> str:
         now = int(time.time())
         digest = self.token_hash(token)
         encrypted = self._cipher.encrypt(cookie.encode("utf-8"))
+        encrypted_xcommon = self._cipher.encrypt(x_common_params.encode("utf-8")) if x_common_params else b""
         with self._lock, self._connect() as conn:
             conn.execute("BEGIN IMMEDIATE")
             row = conn.execute(
@@ -149,8 +157,8 @@ class NikkeStore:
             conn.execute(
                 """
                 INSERT INTO accounts(
-                    qq_id,cookie_cipher,game_uid,game_openid,nickname,role_name,area_id,updated_at
-                ) VALUES(?,?,?,?,?,?,?,?)
+                    qq_id,cookie_cipher,game_uid,game_openid,nickname,role_name,area_id,updated_at,xcommon_cipher,user_agent
+                ) VALUES(?,?,?,?,?,?,?,?,?,?)
                 ON CONFLICT(qq_id) DO UPDATE SET
                     cookie_cipher=excluded.cookie_cipher,
                     game_uid=excluded.game_uid,
@@ -158,10 +166,12 @@ class NikkeStore:
                     nickname=excluded.nickname,
                     role_name=excluded.role_name,
                     area_id=excluded.area_id,
+                    xcommon_cipher=excluded.xcommon_cipher,
+                    user_agent=excluded.user_agent,
                     cookie_valid=1,
                     updated_at=excluded.updated_at
                 """,
-                (qq_id, encrypted, game_uid, game_openid, nickname, role_name, area_id, now),
+                (qq_id, encrypted, game_uid, game_openid, nickname, role_name, area_id, now, encrypted_xcommon, user_agent),
             )
             conn.execute(
                 "UPDATE bind_sessions SET used_at=?, status='success', error='' WHERE token_hash=?",
@@ -178,10 +188,15 @@ class NikkeStore:
         if with_cookie:
             try:
                 account["cookie"] = self._cipher.decrypt(account.pop("cookie_cipher")).decode("utf-8")
+                encrypted_xcommon = account.pop("xcommon_cipher", b"")
+                account["x_common_params"] = (
+                    self._cipher.decrypt(encrypted_xcommon).decode("utf-8") if encrypted_xcommon else ""
+                )
             except InvalidToken as exc:
                 raise RuntimeError("账号凭证无法解密，请重新绑定") from exc
         else:
             account.pop("cookie_cipher", None)
+            account.pop("xcommon_cipher", None)
         return account
 
     def list_accounts(self, push_only: bool = False, with_cookie: bool = True) -> list[dict[str, Any]]:
@@ -239,4 +254,3 @@ class NikkeStore:
                 "UPDATE action_runs SET status=?, detail=? WHERE run_key=?",
                 (status, detail[:500], run_key),
             )
-

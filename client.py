@@ -7,6 +7,8 @@
 from __future__ import annotations
 
 import asyncio
+import json
+import random
 from dataclasses import dataclass
 from typing import Any, Callable
 
@@ -22,6 +24,8 @@ PROFILE = "/api/game/proxy/Game/GetUserProfileBasicInfo"
 OUTPOST = "/api/game/proxy/Game/GetUserProfileOutpostInfo"
 CHARACTERS = "/api/game/proxy/Game/GetUserCharacters"
 CHARACTER_DETAILS = "/api/game/proxy/Game/GetUserCharacterDetails"
+TASK_LIST = "/api/lip/proxy/lipass/Points/GetTaskListWithStatusV2"
+DAILY_CHECK_IN = "/api/lip/proxy/lipass/Points/DailyCheckIn"
 
 NIKKE_DIRECTORY_ZH = "https://sg-tools-cdn.blablalink.com/jz-26/ww-14/c4619ec83335bcfd7b23e43600520dc7.json"
 NIKKE_DIRECTORY_EN = "https://sg-tools-cdn.blablalink.com/yl-57/hd-03/1bf030193826e243c2e195f951a4be00.json"
@@ -289,6 +293,117 @@ class BlaBlaClient:
                 }
             )
         return result
+
+    @staticmethod
+    def _community_context(account: dict[str, Any]) -> tuple[str, str]:
+        raw = str(account.get("x_common_params", ""))
+        try:
+            context = json.loads(raw)
+        except json.JSONDecodeError as exc:
+            raise BlaBlaError("账号缺少社区上下文，请使用0.1.2扩展重新绑定") from exc
+        if not isinstance(context, dict) or not context.get("openid"):
+            raise BlaBlaError("账号缺少社区上下文，请使用0.1.2扩展重新绑定")
+        game_id = str(BlaBlaClient.parse_cookie(account["cookie"]).get("game_gameid", ""))
+        game_id = game_id or str(context.get("intl_game_id", ""))
+        if not game_id:
+            raise BlaBlaError("账号缺少游戏上下文，请重新绑定")
+        return raw, game_id
+
+    async def _community_request(
+        self,
+        method: str,
+        path: str,
+        account: dict[str, Any],
+        *,
+        params: dict[str, Any] | None = None,
+        payload: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        x_common, _ = self._community_context(account)
+        context = json.loads(x_common)
+        endpoint = path.rsplit("/", 1)[-1]
+        headers = {
+            "Accept": "application/json, text/plain, */*",
+            "Content-Type": "application/json",
+            "Cookie": account["cookie"],
+            "Origin": "https://www.blablalink.com",
+            "Referer": "https://www.blablalink.com/",
+            "User-Agent": account.get("user_agent") or "Mozilla/5.0",
+            "x-channel-type": "2",
+            "x-common-params": x_common,
+            "x-language": str(context.get("language", "zh-TW")),
+        }
+        self._diagnose(f"{endpoint} 社区请求开始；method={method}；payload_keys={sorted(payload or {})}")
+        try:
+            async with httpx.AsyncClient(timeout=self.timeout, follow_redirects=False) as client:
+                response = await client.request(
+                    method,
+                    API_BASE + path,
+                    params=params,
+                    json=payload if payload is not None else None,
+                    headers=headers,
+                )
+            response.raise_for_status()
+            data = response.json()
+        except (httpx.HTTPError, ValueError) as exc:
+            self._diagnose(f"{endpoint} 社区请求异常；type={type(exc).__name__}")
+            raise BlaBlaError(f"{endpoint} 请求失败：{type(exc).__name__}", endpoint=endpoint) from exc
+        code = str(data.get("code", data.get("retcode", "")))
+        response_data = data.get("data")
+        keys = sorted(response_data)[:20] if isinstance(response_data, dict) else []
+        self._diagnose(f"{endpoint} 社区响应；code={code or 'missing'}；data_keys={keys}")
+        if code not in ("", "0") or str(data.get("msg", "ok")).lower() not in {"", "ok", "success"}:
+            raise BlaBlaError(str(data.get("msg", data.get("message", "社区接口失败"))), code, endpoint)
+        return data
+
+    async def get_daily_signin(self, account: dict[str, Any]) -> dict[str, Any]:
+        _, game_id = self._community_context(account)
+        data = await self._community_request(
+            "GET",
+            TASK_LIST,
+            account,
+            params={"get_top": "false", "intl_game_id": game_id},
+        )
+        for task in (data.get("data", {}) or {}).get("tasks", []) or []:
+            name = str(task.get("task_name", ""))
+            lowered = name.casefold()
+            if "签到" not in name and "簽到" not in name and "sign" not in lowered:
+                continue
+            reward = next(iter(task.get("reward_infos", []) or []), {})
+            return {
+                "found": True,
+                "completed": bool(reward.get("is_completed", False)),
+                "task_id": str(task.get("task_id", "")),
+                "task_name": name,
+            }
+        return {"found": False, "completed": False, "task_id": "", "task_name": ""}
+
+    async def perform_daily_signin(self, account: dict[str, Any]) -> str:
+        status = await self.get_daily_signin(account)
+        if not status["found"]:
+            raise BlaBlaError("未找到每日签到任务", endpoint="GetTaskListWithStatusV2")
+        if status["completed"]:
+            return "今日已经签到"
+        if not status["task_id"]:
+            raise BlaBlaError("签到任务缺少task_id", endpoint="GetTaskListWithStatusV2")
+        last_error: BlaBlaError | None = None
+        for attempt in range(3):
+            if attempt:
+                await asyncio.sleep((2 ** attempt) + random.uniform(0, 1))
+            try:
+                await self._community_request(
+                    "POST",
+                    DAILY_CHECK_IN,
+                    account,
+                    payload={"task_id": status["task_id"]},
+                )
+            except BlaBlaError as exc:
+                last_error = exc
+            verified = await self.get_daily_signin(account)
+            if verified["completed"]:
+                return "签到成功"
+        if last_error:
+            raise last_error
+        raise BlaBlaError("签到后状态未完成", endpoint="DailyCheckIn")
 
     @staticmethod
     def calculate_ael(character: dict[str, Any]) -> float:

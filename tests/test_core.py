@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import asyncio
 import json
 import sqlite3
 import tempfile
@@ -105,6 +106,8 @@ class BindingApiTests(unittest.IsolatedAsyncioTestCase):
                             {"name": "site_session", "value": "needed", "domain": "www.blablalink.com"},
                             {"name": "foreign", "value": "secret", "domain": ".example.com"},
                         ],
+                        "x_common_params": json.dumps({"openid": "runtime-openid", "language": "zh-TW"}),
+                        "user_agent": "Test Browser",
                     },
                 )
                 self.assertEqual(response.status, 200)
@@ -162,6 +165,30 @@ class CanonicalOpenIdClient(BlaBlaClient):
         raise AssertionError(path)
 
 
+class CommunitySigninClient(BlaBlaClient):
+    def __init__(self, completed: bool = False):
+        super().__init__(5)
+        self.completed = completed
+        self.calls = []
+
+    async def _community_request(self, method, path, account, *, params=None, payload=None):
+        self.calls.append((method, path, payload))
+        if method == "POST":
+            self.completed = True
+            return {"code": 0, "msg": "ok", "data": {}}
+        return {
+            "code": 0,
+            "msg": "ok",
+            "data": {
+                "tasks": [{
+                    "task_name": "每日簽到",
+                    "task_id": "daily-task",
+                    "reward_infos": [{"is_completed": self.completed}],
+                }]
+            },
+        }
+
+
 class StoreTests(unittest.TestCase):
     def test_single_use_and_encryption(self):
         with tempfile.TemporaryDirectory() as td:
@@ -197,6 +224,80 @@ class StoreTests(unittest.TestCase):
 
 
 class ClientTests(unittest.IsolatedAsyncioTestCase):
+    @staticmethod
+    def _community_account():
+        return {
+            "cookie": VALID_COOKIE + "; game_gameid=3",
+            "x_common_params": json.dumps({"openid": "runtime", "intl_game_id": "3", "language": "zh-TW"}),
+            "user_agent": "Test Browser",
+        }
+
+    async def test_daily_signin_checks_before_and_after_write(self):
+        client = CommunitySigninClient()
+        result = await client.perform_daily_signin(self._community_account())
+        self.assertEqual(result, "签到成功")
+        self.assertEqual([call[0] for call in client.calls], ["GET", "POST", "GET"])
+
+    async def test_daily_signin_skips_completed_task(self):
+        client = CommunitySigninClient(completed=True)
+        result = await client.perform_daily_signin(self._community_account())
+        self.assertEqual(result, "今日已经签到")
+        self.assertEqual([call[0] for call in client.calls], ["GET"])
+
+    async def test_cookie_expired_is_preserved(self):
+        class ExpiredClient(BlaBlaClient):
+            async def _post(self, path, cookie, payload):
+                from astrbot_plugin_nikke.client import CookieExpired
+                raise CookieExpired("expired", "401", path.rsplit("/", 1)[-1])
+
+        from astrbot_plugin_nikke.client import CookieExpired
+        with self.assertRaises(CookieExpired):
+            await ExpiredClient(5).validate_cookie(VALID_COOKIE)
+
+    async def test_1300015_retries_are_bounded(self):
+        class RetryClient(BlaBlaClient):
+            def __init__(self):
+                super().__init__(5)
+                self.count = 0
+
+            async def _post(self, path, cookie, payload):
+                from astrbot_plugin_nikke.client import PLAYER_INFO, PROFILE
+                if path == PLAYER_INFO:
+                    self.count += 1
+                    if self.count < 3:
+                        raise BlaBlaError("system", "1300015", "GetUserGamePlayerInfo")
+                    return {"code": 0, "data": {"area_id": 3, "role_name": "角色"}}
+                if path == PROFILE:
+                    return {"code": 0, "data": {"basic_info": {}}}
+                raise AssertionError(path)
+
+        from unittest.mock import AsyncMock, patch
+        client = RetryClient()
+        with patch("astrbot_plugin_nikke.client.asyncio.sleep", new=AsyncMock()):
+            result = await client.validate_cookie(VALID_COOKIE)
+        self.assertEqual(result.area_id, "3")
+        self.assertEqual(client.count, 3)
+
+    async def test_two_accounts_keep_cookie_isolated(self):
+        class IsolationClient(BlaBlaClient):
+            async def _post(self, path, cookie, payload):
+                from astrbot_plugin_nikke.client import PLAYER_INFO, PROFILE
+                uid = self.parse_cookie(cookie)["game_uid"]
+                if path == PLAYER_INFO:
+                    await asyncio.sleep(0)
+                    return {"code": 0, "data": {"area_id": int(uid), "role_name": uid}}
+                if path == PROFILE:
+                    return {"code": 0, "data": {"basic_info": {"nickname": uid}}}
+                raise AssertionError(path)
+
+        first = "game_token=a; game_uid=1; game_openid=11"
+        second = "game_token=b; game_uid=2; game_openid=22"
+        results = await asyncio.gather(
+            IsolationClient(5).validate_cookie(first),
+            IsolationClient(5).validate_cookie(second),
+        )
+        self.assertEqual([item.nickname for item in results], ["1", "2"])
+
     async def test_player_lookup_falls_back_to_game_openid(self):
         client = OpenIdFallbackClient()
         result = await client.validate_cookie(VALID_COOKIE)
@@ -268,7 +369,10 @@ class ExtensionTests(unittest.TestCase):
         manifest = json.loads((root / "extension" / "manifest.json").read_text(encoding="utf-8"))
         hosts = manifest["host_permissions"]
         self.assertNotIn("<all_urls>", hosts)
-        self.assertEqual(set(manifest["permissions"]), {"cookies", "tabs", "storage"})
+        self.assertEqual(set(manifest["permissions"]), {"cookies", "tabs", "storage", "webRequest"})
+        background = (root / "extension" / "background.js").read_text(encoding="utf-8")
+        self.assertIn("x-common-params", background)
+        self.assertNotIn("requestBody", background)
 
 
 class HelpTests(unittest.TestCase):

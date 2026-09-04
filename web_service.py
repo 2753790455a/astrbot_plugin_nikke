@@ -104,7 +104,7 @@ class BindingWebService:
         return web.Response(status=204)
 
     async def health(self, _: web.Request) -> web.Response:
-        return web.json_response({"ok": True, "service": "nikke-binding", "version": "0.1.1"})
+        return web.json_response({"ok": True, "service": "nikke-binding", "version": "0.1.2"})
 
     async def create_session(self, request: web.Request) -> web.Response:
         """供受信任的机器人进程创建绑定会话，公网匿名请求不能调用。"""
@@ -134,7 +134,7 @@ class BindingWebService:
 <body><main><h1>NIKKE · BlaBlaLink 安全绑定</h1><p class='{"ok" if valid else "bad"}'>{html.escape(status)}</p>
 <p>1. 安装辅助扩展；2. 点击扩展打开BlaBlaLink并完成官方登录；3. 回到扩展提交Cookie。</p>
 <p>机器人不会接收或保存你的账号密码。</p>
-<p><a href='/download'>从绑定服务器下载扩展</a> · <a href='https://github.com/September6969/astrbot_plugin_nikke/releases/download/v0.1.1/nikke-bind-extension-0.1.1.zip'>GitHub备用下载</a></p>
+<p><a href='/download'>从绑定服务器下载扩展</a> · <a href='https://github.com/September6969/astrbot_plugin_nikke/releases'>GitHub备用下载</a></p>
 <code>{html.escape(str(request.url))}</code></main></body></html>"""
         return web.Response(text=page, content_type="text/html")
 
@@ -142,6 +142,8 @@ class BindingWebService:
         body = await request.json(loads=json.loads)
         token = str(body.get("token", ""))
         cookies = body.get("cookies", [])
+        x_common_params = str(body.get("x_common_params", ""))
+        user_agent = str(body.get("user_agent", ""))[:512]
         if not TOKEN_RE.fullmatch(token):
             return web.json_response({"ok": False, "error": "绑定令牌格式错误"}, status=400)
         session = self.store.get_bind_session(token)
@@ -171,6 +173,19 @@ class BindingWebService:
                 {"ok": False, "error": "缺少必要 Cookie：" + ", ".join(missing)},
                 status=400,
             )
+        try:
+            x_common_data = json.loads(x_common_params)
+        except (json.JSONDecodeError, TypeError):
+            x_common_data = None
+        if (
+            not isinstance(x_common_data, dict)
+            or not str(x_common_data.get("openid", "")).strip()
+            or len(x_common_params) > 8192
+        ):
+            return web.json_response(
+                {"ok": False, "error": "账号上下文缺失或不完整，请刷新BlaBlaLink个人主页后重试"},
+                status=400,
+            )
         cookie = "; ".join(parts)
         try:
             result = await self.client.validate_cookie(cookie)
@@ -182,6 +197,8 @@ class BindingWebService:
                 result.nickname,
                 result.role_name,
                 result.area_id,
+                x_common_params,
+                user_agent,
             )
             return web.json_response({"ok": True, "qq_id": qq_id, "nickname": result.nickname})
         except (BlaBlaError, ValueError) as exc:

@@ -37,14 +37,18 @@ document.getElementById("submit").addEventListener("click", async () => {
     const names = new Set(cookies.map(cookie => cookie.name));
     const missing = required.filter(name => !names.has(name));
     if (missing.length) throw new Error(`尚未完成登录，缺少：${missing.join(", ")}`);
+    const { xCommonParams } = await chrome.storage.local.get("xCommonParams");
+    if (!xCommonParams) {
+      throw new Error("尚未捕获账号上下文。请打开BlaBlaLink个人主页并刷新一次，再提交绑定。");
+    }
     const response = await fetch(`${url.origin}/api/bind/cookies`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token, cookies })
+      body: JSON.stringify({ token, cookies, x_common_params: xCommonParams, user_agent: navigator.userAgent })
     });
     const result = await response.json();
     if (!response.ok || !result.ok) throw new Error(result.error || `提交失败 HTTP ${response.status}`);
-    await chrome.storage.local.remove("bindUrl");
+    await chrome.storage.local.remove(["bindUrl", "xCommonParams"]);
     statusBox.textContent = `绑定成功：${result.nickname || result.qq_id}\n现在可以关闭或卸载本扩展。`;
   } catch (error) {
     statusBox.textContent = error.message;

@@ -6,6 +6,7 @@ from __future__ import annotations
 import asyncio
 import json
 import os
+import random
 import secrets
 import time
 import zipfile
@@ -27,7 +28,7 @@ from .web_service import BindingWebService
     "astrbot_plugin_nikke",
     "September",
     "NIKKE BlaBlaLink 账号练度、资料查询与每日汇总",
-    "0.1.1",
+    "0.1.2",
     "https://github.com/September6969/astrbot_plugin_nikke",
 )
 class NikkePlugin(Star):
@@ -96,7 +97,7 @@ class NikkePlugin(Star):
             summary_m = int(self.store.get_setting("summary_minute", self.config.get("summary_minute", 30)))
             if (now.hour, now.minute) == (daily_h, daily_m) and last_daily != today:
                 last_daily = today
-                asyncio.create_task(self._run_all_daily(today))
+                asyncio.create_task(self._run_all_daily(today, stagger=True))
             if (now.hour, now.minute) == (summary_h, summary_m) and last_summary != today:
                 last_summary = today
                 asyncio.create_task(self._send_summary(today))
@@ -187,7 +188,7 @@ class NikkePlugin(Star):
         if selected in sections:
             return sections[selected] + "\n\n发送 /nikke help 查看全部指令。"
         return (
-            "NIKKE 综合助手 0.1.1\n\n"
+            "NIKKE 综合助手 0.1.2\n\n"
             + "\n\n".join(sections.values())
             + "\n\n帮助分类：/nikke help 账号|练度|资料|日常|管理\n"
             "安全提示：不要在群里发送Cookie、密码或绑定链接。"
@@ -398,9 +399,28 @@ class NikkePlugin(Star):
         try:
             await self.client.get_profile(account)
             if bool(self.config.get("enable_daily_actions", False)):
-                detail = "登录有效；签到接口尚未通过真实账号契约测试，未执行写操作"
+                signin_key = f"{day}:{qq_id}:signin"
+                status = await self.client.get_daily_signin(account)
+                if not status["found"]:
+                    detail = "登录有效；未找到签到任务"
+                elif status["completed"]:
+                    detail = "登录有效；今日已经签到"
+                elif self.store.claim_run(signin_key, qq_id, "signin"):
+                    try:
+                        detail = "登录有效；" + await self.client.perform_daily_signin(account)
+                        self.store.finish_run(signin_key, "success", detail)
+                    except Exception as exc:
+                        self.store.finish_run(signin_key, "failed", type(exc).__name__)
+                        raise
+                else:
+                    detail = "登录有效；签到已执行或正在执行"
             else:
-                detail = "登录有效；自动签到功能未启用"
+                try:
+                    status = await self.client.get_daily_signin(account)
+                    signin = "已签到" if status["completed"] else "待签到" if status["found"] else "未找到签到任务"
+                    detail = f"登录有效；自动签到未启用；当前{signin}"
+                except BlaBlaError as exc:
+                    detail = f"登录有效；自动签到未启用；{exc}"
             self.store.finish_run(run_key, "success", detail)
             return account.get("nickname") or qq_id, detail
         except CookieExpired:
@@ -412,11 +432,13 @@ class NikkePlugin(Star):
             self.store.finish_run(run_key, "failed", detail)
             return account.get("nickname") or qq_id, detail
 
-    async def _run_all_daily(self, day: str) -> list[tuple[str, str]]:
+    async def _run_all_daily(self, day: str, stagger: bool = False) -> list[tuple[str, str]]:
         accounts = self.store.list_accounts(push_only=True, with_cookie=True)
         semaphore = asyncio.Semaphore(max(1, int(self.config.get("max_concurrency", 2))))
 
         async def run(account):
+            if stagger:
+                await asyncio.sleep(random.uniform(0, 15 * 60))
             async with semaphore:
                 return await self._run_daily_for_account(account, day)
 
@@ -448,7 +470,29 @@ class NikkePlugin(Star):
     @filter.command("nikke claim")
     async def claim(self, event: AstrMessageEvent):
         """领取已满足条件的社区奖励。"""
-        yield event.plain_result("写操作接口尚未通过真实账号契约测试，当前版本不会冒险提交领奖请求。")
+        if not bool(self.config.get("enable_daily_actions", False)):
+            yield event.plain_result("签到写操作当前由管理员关闭；可使用 /nikke daily 查看只读状态。")
+            return
+        try:
+            account = self._account_or_error(event)
+            day = datetime.now().strftime("%Y-%m-%d")
+            run_key = f"{day}:{self._qq_id(event)}:signin"
+            status = await self.client.get_daily_signin(account)
+            if status["completed"]:
+                yield event.plain_result("今日已经签到，无需重复执行。")
+                return
+            if not self.store.claim_run(run_key, self._qq_id(event), "signin"):
+                yield event.plain_result("今日签到已经执行或正在执行，不会重复提交。")
+                return
+            try:
+                result = await self.client.perform_daily_signin(account)
+                self.store.finish_run(run_key, "success", result)
+                yield event.plain_result(result)
+            except Exception as exc:
+                self.store.finish_run(run_key, "failed", type(exc).__name__)
+                raise
+        except Exception as exc:
+            yield event.plain_result(f"签到失败：{exc}")
 
     @filter.command("nikke cdk")
     async def cdk(self, event: AstrMessageEvent, code: str):
@@ -530,7 +574,7 @@ class NikkePlugin(Star):
             return
         accounts = self.store.list_accounts(with_cookie=False)
         yield event.plain_result(
-            f"NIKKE插件 0.1.1\n账号：{len(accounts)}\n目录：{len(self._directory)}\n"
+            f"NIKKE插件 0.1.2\n账号：{len(accounts)}\n目录：{len(self._directory)}\n"
             f"绑定服务：{self.web_host}:{self.web_port}\n自动写操作：{'启用' if self.config.get('enable_daily_actions', False) else '关闭'}"
         )
 
