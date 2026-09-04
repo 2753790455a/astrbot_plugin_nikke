@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>NIKKE安全绑定</title>
+  <style>
+    body{width:360px;margin:0;padding:20px;background:#11151d;color:#edf1f7;font-family:system-ui}
+    h1{font-size:20px;border-left:5px solid #f2b229;padding-left:10px}
+    input,button{box-sizing:border-box;width:100%;margin-top:10px;padding:11px;border-radius:5px}
+    input{background:#202734;border:1px solid #3a4659;color:white}
+    button{border:0;background:#f2b229;color:#151515;font-weight:700;cursor:pointer}
+    button.secondary{background:#303a4a;color:white}.status{min-height:40px;margin-top:12px;white-space:pre-wrap}
+    small{color:#9ba6b6}
+  </style>
+</head>
+<body>
+  <h1>NIKKE QQ 安全绑定</h1>
+  <small>账号密码只输入在BlaBlaLink官网。本扩展仅提交必要Cookie。</small>
+  <input id="bindUrl" placeholder="粘贴机器人给出的绑定链接">
+  <button id="openLogin" class="secondary">1. 打开BlaBlaLink官网登录</button>
+  <button id="submit">2. 已登录，提交绑定</button>
+  <div id="status" class="status"></div>
+  <script src="popup.js"></script>
+</body>
+</html>
+

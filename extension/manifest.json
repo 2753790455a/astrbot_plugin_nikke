@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "NIKKE QQ 安全绑定助手",
+  "version": "0.1.0",
+  "description": "在BlaBlaLink官网登录后，将必要Cookie提交给用户指定的NIKKE机器人。",
+  "permissions": ["cookies", "tabs", "storage"],
+  "host_permissions": [
+    "https://*.blablalink.com/*",
+    "https://nikke.irises777.xyz/*"
+  ],
+  "action": {
+    "default_title": "NIKKE QQ 安全绑定",
+    "default_popup": "popup.html"
+  }
+}
+

@@ -1,0 +1,57 @@
+{
+  "public_base_url": {
+    "description": "绑定服务公网地址",
+    "type": "string",
+    "default": "https://nikke.irises777.xyz"
+  },
+  "web_host": {
+    "description": "绑定服务监听地址",
+    "type": "string",
+    "default": "0.0.0.0"
+  },
+  "web_port": {
+    "description": "绑定服务容器内端口",
+    "type": "int",
+    "default": 6210
+  },
+  "binding_api_key": {
+    "description": "创建绑定会话接口的Bearer密钥；留空时禁用该接口",
+    "type": "string",
+    "default": ""
+  },
+  "daily_hour": {
+    "description": "每日任务开始小时（北京时间）",
+    "type": "int",
+    "default": 8
+  },
+  "daily_minute": {
+    "description": "每日任务开始分钟",
+    "type": "int",
+    "default": 10
+  },
+  "summary_hour": {
+    "description": "每日汇总小时（北京时间）",
+    "type": "int",
+    "default": 8
+  },
+  "summary_minute": {
+    "description": "每日汇总分钟",
+    "type": "int",
+    "default": 30
+  },
+  "request_timeout": {
+    "description": "BlaBlaLink 请求超时秒数",
+    "type": "int",
+    "default": 20
+  },
+  "max_concurrency": {
+    "description": "账号任务最大并发数",
+    "type": "int",
+    "default": 2
+  },
+  "enable_daily_actions": {
+    "description": "启用已验证的社区签到与领奖接口",
+    "type": "bool",
+    "default": false
+  }
+}
