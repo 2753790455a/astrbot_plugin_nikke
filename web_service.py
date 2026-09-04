@@ -133,7 +133,8 @@ class BindingWebService:
 <style>body{{font-family:system-ui;background:#10131a;color:#eef2f7;margin:0}}main{{max-width:720px;margin:8vh auto;padding:36px;background:#191f2a;border-top:6px solid #f2b229}}a{{color:#f2b229}}code{{word-break:break-all}}.ok{{color:#71d49b}}.bad{{color:#ff776d}}</style></head>
 <body><main><h1>NIKKE · BlaBlaLink 安全绑定</h1><p class='{"ok" if valid else "bad"}'>{html.escape(status)}</p>
 <p>1. 安装辅助扩展；2. 点击扩展打开BlaBlaLink并完成官方登录；3. 回到扩展提交Cookie。</p>
-<p>机器人不会接收或保存你的账号密码。</p><p><a href='/download'>下载Chrome/Edge扩展</a></p>
+<p>机器人不会接收或保存你的账号密码。</p>
+<p><a href='/download'>从绑定服务器下载扩展</a> · <a href='https://github.com/September6969/astrbot_plugin_nikke/releases/download/v0.1.1/nikke-bind-extension-0.1.1.zip'>GitHub备用下载</a></p>
 <code>{html.escape(str(request.url))}</code></main></body></html>"""
         return web.Response(text=page, content_type="text/html")
 
