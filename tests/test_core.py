@@ -271,5 +271,23 @@ class ExtensionTests(unittest.TestCase):
         self.assertEqual(set(manifest["permissions"]), {"cookies", "tabs", "storage"})
 
 
+class HelpTests(unittest.TestCase):
+    def test_help_lists_categories_and_safety_state(self):
+        from astrbot_plugin_nikke.main import NikkePlugin
+
+        text = NikkePlugin._help_text()
+        self.assertIn("/nikke bind", text)
+        self.assertIn("/nikke roster", text)
+        self.assertIn("/nikke claim", text)
+        self.assertIn("当前安全禁用", text)
+
+    def test_help_category_alias(self):
+        from astrbot_plugin_nikke.main import NikkePlugin
+
+        text = NikkePlugin._help_text("account")
+        self.assertIn("【账号绑定】", text)
+        self.assertNotIn("【管理员】", text)
+
+
 if __name__ == "__main__":
     unittest.main()

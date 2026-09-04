@@ -132,19 +132,71 @@ class NikkePlugin(Star):
             or term == str(item.get("name_code", "")).casefold()
         ]
 
-    @filter.command("nikke help")
-    async def nikke_help(self, event: AstrMessageEvent):
-        """查看NIKKE综合助手指令。"""
-        text = (
-            "NIKKE 综合助手\n"
-            "/nikke bind|unbind|status|me\n"
-            "/nikke roster|progress|character <名称>|export\n"
-            "/nikke info|skill|advise|image <名称>\n"
-            "/nikke stage|tower|cube|collection <关键词>\n"
-            "/nikke daily|claim|push on|off\n"
-            "管理员：/nikke group set、/nikke schedule HH:MM、/nikke summary HH:MM、/nikke run、/nikke health"
+    @staticmethod
+    def _help_text(category: str = "") -> str:
+        sections = {
+            "账号": (
+                "【账号绑定】\n"
+                "/nikke bind — 私聊生成10分钟一次性绑定链接\n"
+                "/nikke status — 查看绑定和Cookie状态\n"
+                "/nikke me — 查看指挥官资料\n"
+                "/nikke unbind — 删除自己的绑定与Cookie"
+            ),
+            "练度": (
+                "【个人练度】\n"
+                "/nikke roster — 生成妮姬练度总表\n"
+                "/nikke progress — 查看同步器、前哨和战役进度\n"
+                "/nikke character <名称> — 查看单个妮姬详情\n"
+                "/nikke export — 导出个人练度JSON"
+            ),
+            "资料": (
+                "【资料查询】\n"
+                "/nikke info <名称> — 妮姬基础资料\n"
+                "/nikke skill <名称> — 技能资料入口\n"
+                "/nikke advise <名称> — 面谈资料入口\n"
+                "/nikke stage <编号> — 关卡资料入口\n"
+                "/nikke tower <类型> — 企业塔资料入口\n"
+                "/nikke cube <名称> — 魔方资料入口\n"
+                "/nikke collection <名称> — 收藏品资料入口\n"
+                "/nikke image <名称> [类型] — 图片资料入口"
+            ),
+            "日常": (
+                "【日常与推送】\n"
+                "/nikke daily — 检查自己的登录和每日状态\n"
+                "/nikke push on|off — 加入或退出群汇总\n"
+                "/nikke claim — 奖励领取（当前安全禁用）\n"
+                "/nikke cdk <兑换码> — 显示官方手动兑换入口"
+            ),
+            "管理": (
+                "【管理员】\n"
+                "/nikke group set — 将当前群设为汇总目标\n"
+                "/nikke schedule HH:MM — 设置每日检查时间\n"
+                "/nikke summary HH:MM — 设置汇总发送时间\n"
+                "/nikke run — 立即执行汇总\n"
+                "/nikke health — 查看插件健康状态"
+            ),
+        }
+        aliases = {
+            "account": "账号", "bind": "账号",
+            "roster": "练度", "progress": "练度",
+            "info": "资料", "data": "资料",
+            "daily": "日常", "push": "日常",
+            "admin": "管理",
+        }
+        selected = aliases.get(category.strip().lower(), category.strip())
+        if selected in sections:
+            return sections[selected] + "\n\n发送 /nikke help 查看全部指令。"
+        return (
+            "NIKKE 综合助手 0.1.1\n\n"
+            + "\n\n".join(sections.values())
+            + "\n\n帮助分类：/nikke help 账号|练度|资料|日常|管理\n"
+            "安全提示：不要在群里发送Cookie、密码或绑定链接。"
         )
-        yield event.plain_result(text)
+
+    @filter.command("nikke help")
+    async def nikke_help(self, event: AstrMessageEvent, category: str = ""):
+        """查看全部或分类的NIKKE综合助手指令。"""
+        yield event.plain_result(self._help_text(category))
 
     @filter.command("nikke bind")
     async def bind(self, event: AstrMessageEvent):
