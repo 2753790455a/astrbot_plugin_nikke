@@ -22,6 +22,20 @@ ALLOWED_COOKIE_NAMES = {"game_token", "game_uid", "game_openid"}
 COOKIE_NAME_RE = re.compile(r"^[!#$%&'*+.^_`|~0-9A-Za-z-]{1,128}$")
 MAX_COOKIE_COUNT = 100
 MAX_COOKIE_HEADER_LENGTH = 32 * 1024
+EXTENSION_ORIGIN_RE = re.compile(r"^(?:chrome-extension|extension)://[a-z0-9]{16,64}$")
+SITE_ORIGIN = "https://nikke.irises777.xyz"
+
+
+def public_error(exc: Exception) -> str:
+    """生成可供用户和日志关联的脱敏错误，不回显凭据或邮箱。"""
+    text = str(exc).replace("\r", " ").replace("\n", " ")
+    text = re.sub(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+", "[邮箱已遮盖]", text)
+    text = re.sub(r"(?i)((?:token|cookie|authorization)\s*[:=]\s*)[^\s,;]+", r"\1[已遮盖]", text)
+    prefix = ""
+    if isinstance(exc, BlaBlaError):
+        location = "/".join(item for item in (exc.endpoint, exc.code) if item)
+        prefix = f"[{location}] " if location else ""
+    return (prefix + text)[:240]
 
 
 class BindingWebService:
@@ -43,12 +57,18 @@ class BindingWebService:
         if len(queue) >= 60:
             return web.json_response({"ok": False, "error": "请求过于频繁"}, status=429)
         queue.append(now)
+        origin = request.headers.get("Origin", "")
+        allowed_origin = origin == SITE_ORIGIN or bool(EXTENSION_ORIGIN_RE.fullmatch(origin))
+        if origin and request.path.startswith("/api/") and not allowed_origin:
+            return web.json_response({"ok": False, "error": "不允许的请求来源"}, status=403)
         if request.method == "OPTIONS":
             response = web.Response(status=204)
         else:
             response = await handler(request)
-        response.headers["Access-Control-Allow-Origin"] = "*"
-        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+        if allowed_origin:
+            response.headers["Access-Control-Allow-Origin"] = origin
+            response.headers["Vary"] = "Origin"
+        response.headers["Access-Control-Allow-Headers"] = "Authorization, Content-Type"
         response.headers["Access-Control-Allow-Methods"] = "GET,POST,OPTIONS"
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["Referrer-Policy"] = "no-referrer"
@@ -84,7 +104,7 @@ class BindingWebService:
         return web.Response(status=204)
 
     async def health(self, _: web.Request) -> web.Response:
-        return web.json_response({"ok": True, "service": "nikke-binding", "version": "0.1.0"})
+        return web.json_response({"ok": True, "service": "nikke-binding", "version": "0.1.1"})
 
     async def create_session(self, request: web.Request) -> web.Response:
         """供受信任的机器人进程创建绑定会话，公网匿名请求不能调用。"""
@@ -164,8 +184,9 @@ class BindingWebService:
             )
             return web.json_response({"ok": True, "qq_id": qq_id, "nickname": result.nickname})
         except (BlaBlaError, ValueError) as exc:
-            self.store.fail_bind_session(token, str(exc))
-            return web.json_response({"ok": False, "error": str(exc)}, status=400)
+            error = public_error(exc)
+            self.store.fail_bind_session(token, error)
+            return web.json_response({"ok": False, "error": error}, status=400)
         except Exception:
             self.store.fail_bind_session(token, "服务器验证失败")
             return web.json_response({"ok": False, "error": "服务器验证失败，请稍后重试"}, status=502)

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import asyncio
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Callable
 
 import httpx
 
@@ -28,9 +28,10 @@ NIKKE_DIRECTORY_EN = "https://sg-tools-cdn.blablalink.com/yl-57/hd-03/1bf0301938
 
 
 class BlaBlaError(RuntimeError):
-    def __init__(self, message: str, code: str = ""):
+    def __init__(self, message: str, code: str = "", endpoint: str = ""):
         super().__init__(message)
         self.code = str(code)
+        self.endpoint = endpoint
 
 
 class CookieExpired(BlaBlaError):
@@ -48,8 +49,17 @@ class ValidationResult:
 
 
 class BlaBlaClient:
-    def __init__(self, timeout: int = 20):
+    def __init__(self, timeout: int = 20, diagnostic: Callable[[str], None] | None = None):
         self.timeout = httpx.Timeout(timeout, connect=min(timeout, 10))
+        self.diagnostic = diagnostic
+
+    def _diagnose(self, message: str) -> None:
+        if not self.diagnostic:
+            return
+        try:
+            self.diagnostic(message)
+        except Exception:
+            pass
 
     @staticmethod
     def parse_cookie(cookie: str) -> dict[str, str]:
@@ -62,24 +72,38 @@ class BlaBlaClient:
         return values
 
     async def _post(self, path: str, cookie: str, payload: dict[str, Any]) -> dict[str, Any]:
+        endpoint = path.rsplit("/", 1)[-1]
+        self._diagnose(f"{endpoint} 请求开始；payload_keys={sorted(payload)}")
         headers = {
             "Accept": "application/json",
             "Content-Type": "application/json",
             "Cookie": cookie,
             "Origin": "https://www.blablalink.com",
             "Referer": "https://www.blablalink.com/",
-            "User-Agent": "Mozilla/5.0 NIKKE-AstrBot/0.1",
+            "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+            "(KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
         }
-        async with httpx.AsyncClient(timeout=self.timeout, follow_redirects=False) as client:
-            response = await client.post(API_BASE + path, json=payload, headers=headers)
-        response.raise_for_status()
-        data = response.json()
+        try:
+            async with httpx.AsyncClient(timeout=self.timeout, follow_redirects=False) as client:
+                response = await client.post(API_BASE + path, json=payload, headers=headers)
+            response.raise_for_status()
+            data = response.json()
+        except httpx.HTTPStatusError as exc:
+            self._diagnose(f"{endpoint} HTTP失败；status={exc.response.status_code}")
+            raise BlaBlaError(f"{endpoint} HTTP {exc.response.status_code}", str(exc.response.status_code), endpoint) from exc
+        except (httpx.HTTPError, ValueError) as exc:
+            self._diagnose(f"{endpoint} 请求异常；type={type(exc).__name__}")
+            raise BlaBlaError(f"{endpoint} 请求失败：{type(exc).__name__}", endpoint=endpoint) from exc
         code = str(data.get("code", data.get("retcode", data.get("ret_code", ""))))
+        response_data = data.get("data")
+        data_keys = sorted(response_data)[:20] if isinstance(response_data, dict) else []
+        self._diagnose(f"{endpoint} 响应；code={code or 'missing'}；data_keys={data_keys}")
         if code not in ("", "0"):
             message = str(data.get("message", data.get("msg", f"接口返回 {code}")))
             if code in {"1000002", "1000003", "1001001", "401", "403"}:
-                raise CookieExpired("登录状态已失效，请重新绑定", code)
-            raise BlaBlaError(message, code)
+                raise CookieExpired("登录状态已失效，请重新绑定", code, endpoint)
+            raise BlaBlaError(message, code, endpoint)
         return data
 
     async def validate_cookie(self, cookie: str) -> ValidationResult:
@@ -87,6 +111,7 @@ class BlaBlaClient:
         game_uid = values.get("game_uid", "")
         game_openid = values.get("game_openid", "")
         missing = [name for name in ("game_token", "game_uid", "game_openid") if not values.get(name)]
+        self._diagnose(f"Cookie快照；count={len(values)}；names={sorted(values)}")
         if missing:
             raise BlaBlaError("缺少必要 Cookie：" + ", ".join(missing))
 

@@ -11,12 +11,46 @@ from astrbot_plugin_nikke.client import BlaBlaClient, BlaBlaError
 from astrbot_plugin_nikke.renderer import CardRenderer
 from astrbot_plugin_nikke.storage import NikkeStore
 from astrbot_plugin_nikke.web_service import BindingWebService
+from astrbot_plugin_nikke.web_service import public_error
 
 
 VALID_COOKIE = "game_token=secret-token; game_uid=12345; game_openid=67890"
 
 
 class BindingApiTests(unittest.IsolatedAsyncioTestCase):
+    def test_public_error_contains_endpoint_and_masks_credentials(self):
+        error = BlaBlaError("token=abc user@example.com", "1300001", "CheckLogin")
+        result = public_error(error)
+        self.assertIn("[CheckLogin/1300001]", result)
+        self.assertNotIn("abc", result)
+        self.assertNotIn("user@example.com", result)
+
+    async def test_api_rejects_untrusted_browser_origin(self):
+        with tempfile.TemporaryDirectory() as td:
+            store = NikkeStore(td)
+            service = BindingWebService(store, object(), Path(td) / "extension.zip")
+            from aiohttp.test_utils import TestClient, TestServer
+
+            client = TestClient(TestServer(service.app()))
+            await client.start_server()
+            try:
+                response = await client.get(
+                    "/api/bind/status?token=" + "a" * 40,
+                    headers={"Origin": "https://attacker.example"},
+                )
+                self.assertEqual(response.status, 403)
+                preflight = await client.options(
+                    "/api/bind/cookies",
+                    headers={"Origin": "chrome-extension://abcdefghijklmnopabcdefghijklmnop"},
+                )
+                self.assertEqual(preflight.status, 204)
+                self.assertEqual(
+                    preflight.headers.get("Access-Control-Allow-Origin"),
+                    "chrome-extension://abcdefghijklmnopabcdefghijklmnop",
+                )
+            finally:
+                await client.close()
+
     async def test_session_endpoint_requires_service_key(self):
         with tempfile.TemporaryDirectory() as td:
             store = NikkeStore(td)

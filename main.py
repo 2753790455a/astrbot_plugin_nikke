@@ -27,8 +27,8 @@ from .web_service import BindingWebService
     "astrbot_plugin_nikke",
     "September",
     "NIKKE BlaBlaLink 账号练度、资料查询与每日汇总",
-    "0.1.0",
-    "https://github.com/ExiaProject/ExiaInvasion",
+    "0.1.1",
+    "https://github.com/September6969/astrbot_plugin_nikke",
 )
 class NikkePlugin(Star):
     def __init__(self, context: Context, config=None):
@@ -42,7 +42,10 @@ class NikkePlugin(Star):
         self.export_dir.mkdir(parents=True, exist_ok=True)
         self.extension_zip = self.data_dir / "nikke-bind-extension.zip"
         self.store = NikkeStore(self.data_dir)
-        self.client = BlaBlaClient(int(self.config.get("request_timeout", 20)))
+        self.client = BlaBlaClient(
+            int(self.config.get("request_timeout", 20)),
+            lambda message: logger.info(f"[NIKKE诊断] {message}"),
+        )
         self.renderer = CardRenderer(self.data_dir / "cards", self.plugin_dir / "fonts")
         self.web = BindingWebService(
             self.store,
@@ -105,7 +108,7 @@ class NikkePlugin(Star):
 
     @staticmethod
     def _is_admin(event: AstrMessageEvent) -> bool:
-        return str(getattr(event, "role", "member")) == "admin"
+        return bool(event.is_admin())
 
     def _account_or_error(self, event: AstrMessageEvent) -> dict:
         account = self.store.get_account(self._qq_id(event))
@@ -146,6 +149,9 @@ class NikkePlugin(Star):
     @filter.command("nikke bind")
     async def bind(self, event: AstrMessageEvent):
         """生成十分钟有效的安全绑定链接。"""
+        if not event.is_private_chat() and not bool(self.config.get("allow_group_bind", False)):
+            yield event.plain_result("为防止绑定链接被他人抢先使用，请私聊机器人发送 /nikke bind。")
+            return
         token = secrets.token_urlsafe(36)
         self.store.create_bind_session(token, self._qq_id(event), 600)
         url = f"{self.public_base_url}/bind/{token}"
@@ -472,7 +478,7 @@ class NikkePlugin(Star):
             return
         accounts = self.store.list_accounts(with_cookie=False)
         yield event.plain_result(
-            f"NIKKE插件 0.1.0\n账号：{len(accounts)}\n目录：{len(self._directory)}\n"
+            f"NIKKE插件 0.1.1\n账号：{len(accounts)}\n目录：{len(self._directory)}\n"
             f"绑定服务：{self.web_host}:{self.web_port}\n自动写操作：{'启用' if self.config.get('enable_daily_actions', False) else '关闭'}"
         )
 

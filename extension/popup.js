@@ -31,7 +31,8 @@ document.getElementById("submit").addEventListener("click", async () => {
   statusBox.textContent = "正在读取并验证登录状态…";
   try {
     const { url, token } = parseBindUrl();
-    const cookies = await chrome.cookies.getAll({ domain: "blablalink.com" });
+    // 与浏览器访问官网时的 Cookie 选择规则保持一致，避免同名跨子域 Cookie 串入。
+    const cookies = await chrome.cookies.getAll({ url: "https://www.blablalink.com/" });
     const required = ["game_token", "game_uid", "game_openid"];
     const names = new Set(cookies.map(cookie => cookie.name));
     const missing = required.filter(name => !names.has(name));
@@ -49,4 +50,3 @@ document.getElementById("submit").addEventListener("click", async () => {
     statusBox.textContent = error.message;
   }
 });
-
