@@ -31,7 +31,7 @@ def build_card():
         directory=fixture["directory"],
         payload=payload,
         fetched_at="2026-09-05 05:30",
-        plugin_version="0.1.4",
+        plugin_version="0.1.5",
     )
 
 

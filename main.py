@@ -30,7 +30,7 @@ from .web_service import BindingWebService
     "astrbot_plugin_nikke",
     "September",
     "NIKKE BlaBlaLink 账号练度、资料查询与每日汇总",
-    "0.1.4",
+    "0.1.5",
     "https://github.com/September6969/astrbot_plugin_nikke",
 )
 class NikkePlugin(Star):
@@ -187,7 +187,7 @@ class NikkePlugin(Star):
         if include_admin:
             visible.append(sections["管理"])
         return (
-            "NIKKE 综合助手 0.1.4\n\n"
+            "NIKKE 综合助手 0.1.5\n\n"
             "六个入口：帮助｜账号｜我的｜查询｜签到｜兑换\n\n"
             + "\n\n".join(visible)
             + "\n\n分类帮助：/妮姬 帮助 账号|查询|日常"
@@ -411,7 +411,7 @@ class NikkePlugin(Star):
                 directory=target,
                 payload=payload,
                 fetched_at=datetime.now().strftime("%Y-%m-%d %H:%M"),
-                plugin_version="0.1.4",
+                plugin_version="0.1.5",
             )
             path = self.character_renderer.render_character(card)
             yield event.image_result(path)
@@ -704,7 +704,7 @@ class NikkePlugin(Star):
             return
         accounts = self.store.list_accounts(with_cookie=False)
         yield event.plain_result(
-            f"NIKKE插件 0.1.4\n账号：{len(accounts)}\n目录：{len(self._directory)}\n"
+            f"NIKKE插件 0.1.5\n账号：{len(accounts)}\n目录：{len(self._directory)}\n"
             f"绑定服务：{self.web_host}:{self.web_port}\n"
             f"自动签到：{'启用' if self.config.get('enable_daily_actions', False) else '关闭'}\n"
             f"CDK兑换：{'启用' if self.config.get('enable_cdk_redemption', False) else '关闭'}"
