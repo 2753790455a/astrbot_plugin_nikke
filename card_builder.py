@@ -19,6 +19,9 @@ SLOTS = ("head", "torso", "arm", "leg")
 OPTION_NAMES = {
     "statatk": ("攻击力增加", "percent"),
     "incelementdmg": ("优越代码伤害增加", "percent"),
+    "statammoload": ("最大装弹数增加", "percent"),
+    "statcriticaldamage": ("暴击伤害增加", "percent"),
+    "statchargetime": ("蓄力速度增加", "percent"),
 }
 
 
@@ -53,7 +56,7 @@ class CharacterCardBuilder:
             display_name, unit = mapping
             value = abs(raw_value) / 10000 if unit == "percent" else abs(raw_value)
         else:
-            display_name = f"未知词条 · {raw_type}"
+            display_name = "未识别词条"
             unit = "unknown"
             value = abs(raw_value)
         return EquipmentOption(
@@ -92,6 +95,8 @@ class CharacterCardBuilder:
                 equipped=equipped,
             )
             for index in (1, 2, 3):
+                if not equipped:
+                    break
                 effect_id = detail.get(f"{slot}_equip_option{index}_id")
                 if effect_id in (None, "", 0, "0"):
                     continue
@@ -101,7 +106,7 @@ class CharacterCardBuilder:
                     item.options.append(
                         EquipmentOption(
                             raw_type=str(effect_id),
-                            display_name=f"未知词条 · {effect_id}",
+                            display_name="未识别词条",
                             value=0,
                             unit="unknown",
                         )

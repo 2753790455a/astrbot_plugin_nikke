@@ -20,6 +20,7 @@ from astrbot.api.message_components import Image
 from astrbot.api.star import Context, Star, register
 
 from .card_builder import CharacterCardBuilder
+from .asset_manager import AssetManager
 from .character_card_renderer import CharacterCardRenderer
 from .client import BlaBlaClient, BlaBlaError, CookieExpired
 from .renderer import CardRenderer
@@ -53,6 +54,7 @@ class NikkePlugin(Star):
         self.character_renderer = CharacterCardRenderer(
             self.data_dir / "cards",
             self.plugin_dir / "fonts",
+            AssetManager(self.data_dir / "cache", self.plugin_dir / "assets", remote=True),
         )
         self.web = BindingWebService(
             self.store,
@@ -433,7 +435,7 @@ class NikkePlugin(Star):
                 fetched_at=datetime.now(timezone(timedelta(hours=8))).strftime("%Y-%m-%d %H:%M"),
                 plugin_version="0.1.7",
             )
-            path = self.character_renderer.render_character(card)
+            path = await asyncio.to_thread(self.character_renderer.render_character, card)
             yield event.image_result(path)
         except CookieExpired:
             self.store.mark_cookie_invalid(self._qq_id(event))

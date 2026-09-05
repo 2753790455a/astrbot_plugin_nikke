@@ -69,9 +69,34 @@ class CharacterCardBuilderTests(unittest.TestCase):
             for option in equipment.options
             if option.unit == "unknown"
         ]
-        self.assertTrue(any(item.raw_type == "StatAmmoLoad" for item in unknown))
-        self.assertTrue(all("未知词条" in item.display_name for item in unknown))
-        self.assertNotIn("StatAmmoLoad", {item.display_name for item in card.option_totals})
+        self.assertTrue(any(item.raw_type == "StatChargeDamage" for item in unknown))
+        self.assertTrue(all(item.display_name == "未识别词条" for item in unknown))
+        self.assertNotIn("未识别词条", {item.display_name for item in card.option_totals})
+
+    def test_common_options_and_negative_charge_time(self):
+        card = build_card()
+        totals = {item.display_name: item.value for item in card.option_totals}
+        self.assertAlmostEqual(totals["最大装弹数增加"], 2.0679)
+        self.assertAlmostEqual(totals["蓄力速度增加"], 0.0228)
+        option = CharacterCardBuilder._option_from_function({
+            "function_type": "StatCriticalDamage", "function_value": 688,
+            "function_value_type": "Percent",
+        })
+        self.assertEqual(option.display_name, "暴击伤害增加")
+        self.assertAlmostEqual(option.value, 0.0688)
+
+    def test_unequipped_slot_drops_stale_options_and_totals(self):
+        fixture = load_fixture()
+        detail = fixture["character_details"][0]
+        for slot in ("head", "torso", "arm", "leg"):
+            detail[f"{slot}_equip_tid"] = 0
+        card = CharacterCardBuilder().build(
+            account={}, directory=fixture["directory"],
+            payload={"detail": detail, "state_effects": fixture["state_effects"]},
+            fetched_at="test", plugin_version="test",
+        )
+        self.assertFalse(card.option_totals)
+        self.assertTrue(all(not item.options for item in card.equipment.values()))
 
     def test_roster_level_wins_and_optional_stats_remain_missing(self):
         card = build_card()
@@ -127,13 +152,13 @@ class CharacterDetailClientTests(unittest.IsolatedAsyncioTestCase):
 
 
 class CharacterCardRendererTests(unittest.TestCase):
-    def test_renderer_outputs_fixed_mobile_card(self):
+    def test_renderer_outputs_fixed_horizontal_card(self):
         root = Path(__file__).resolve().parents[1]
         with tempfile.TemporaryDirectory() as td:
             renderer = CharacterCardRenderer(td, root / "fonts")
             path = renderer.render_character(build_card())
             with Image.open(path) as image:
-                self.assertEqual(image.size, (1200, 1500))
+                self.assertEqual(image.size, (1800, 1000))
                 self.assertEqual(image.mode, "RGB")
 
 
