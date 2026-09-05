@@ -102,7 +102,15 @@ class CharacterCardBuilderTests(unittest.TestCase):
         totals = {item.display_name: item.value for item in card.option_totals}
         self.assertAlmostEqual(totals["最大装弹数增加"], 2.0679)
         self.assertAlmostEqual(totals["蓄力速度增加"], 0.0228)
-        self.assertAlmostEqual(totals["蓄力伤害增加"], 0.1463)
+        self.assertNotIn("蓄力伤害增加", totals)
+        charge_damage_unknown = [
+            option
+            for equipment in card.equipment.values()
+            for option in equipment.options
+            if option.raw_type == "StatChargeDamage"
+        ]
+        self.assertTrue(len(charge_damage_unknown) > 0)
+        self.assertTrue(all(item.display_name == "未识别词条" for item in charge_damage_unknown))
         option = CharacterCardBuilder._option_from_function({
             "function_type": "StatCriticalDamage", "function_value": 688,
             "function_value_type": "Percent",

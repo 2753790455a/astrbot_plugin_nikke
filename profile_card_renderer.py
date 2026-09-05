@@ -40,6 +40,18 @@ class ProfileCardRenderer(CardRenderer):
             text += "\u2026"
         draw.text(xy, text, font=font, fill=color, anchor="lt")
 
+    def _text_right(self, draw, xy, text, size, color, *, width=None, bold=False):
+        text = str(text).replace("\n", " ")
+        font = self.font(size, bold)
+        while width and draw.textlength(text, font=font) > width and size > 12:
+            size -= 1
+            font = self.font(size, bold)
+        if width and draw.textlength(text, font=font) > width:
+            while text and draw.textlength(text + "\u2026", font=font) > width:
+                text = text[:-1]
+            text += "\u2026"
+        draw.text(xy, text, font=font, fill=color, anchor="rt")
+
     def _section_panel(self, draw, box, title, *, fill=None):
         x, y, w, h = box
         fill = fill or PROFILE_THEME["panel"]
@@ -68,7 +80,7 @@ class ProfileCardRenderer(CardRenderer):
         draw.line((0, header_h, self.WIDTH, header_h), fill=theme["primary"], width=2)
         self._text(draw, (40, 24), "NIKKE", 38, theme["text"], bold=True)
         self._text(draw, (40, 75), "COMMANDER PROFILE / \u6307\u6325\u5b98\u6863\u6848", 22, theme["primary"])
-        self._text(draw, (1160, 30), data.commander_name, 36, theme["text"], width=600, bold=True)
+        self._text_right(draw, (self.WIDTH - 40, 30), data.commander_name, 36, theme["text"], width=500, bold=True)
 
         # Sections
         y = header_h + 20

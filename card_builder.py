@@ -67,11 +67,15 @@ class CharacterCardBuilder:
         if mapping:
             display_name, unit = mapping
             if value_type and value_type != unit:
-                logger.debug(
-                    "function_value_type mismatch (using mapping): type=%s value_type=%s expected=%s",
+                logger.warning(
+                    "function_value_type mismatch: type=%s value_type=%s expected=%s, treating as unknown",
                     raw_type, value_type, unit,
                 )
-            value = abs(raw_value) / 10000 if unit == "percent" else abs(raw_value)
+                display_name = "未识别词条"
+                unit = "unknown"
+                value = abs(raw_value)
+            else:
+                value = abs(raw_value) / 10000 if unit == "percent" else abs(raw_value)
         else:
             display_name = "未识别词条"
             unit = "unknown"
