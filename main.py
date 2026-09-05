@@ -480,6 +480,13 @@ class NikkePlugin(Star):
                 return
             target = matches[0]
             code = str(target.get("name_code", ""))
+            roster = await self.client.get_roster(account, include_details=False)
+            held_codes = {str(c.get("name_code", "")) for c in roster}
+            if code and code not in held_codes:
+                yield event.plain_result(
+                    f"你未持有该妮姬：{target.get('name_cn') or target.get('name_en') or code}"
+                )
+                return
             payload = await self.client.get_character_detail(account, code)
             card = self.character_builder.build(
                 account=account,

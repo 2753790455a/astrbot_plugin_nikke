@@ -69,7 +69,10 @@ class ProfileCardRenderer(CardRenderer):
         header_h = 140
         panel_gap = 20
         footer_h = 60
-        content_h = sum(h for _, h in sections) + (len(sections) - 1) * panel_gap
+        if sections:
+            content_h = sum(h for _, h in sections) + (len(sections) - 1) * panel_gap
+        else:
+            content_h = 160 + panel_gap
         total_h = header_h + content_h + footer_h + 40
 
         canvas = Image.new("RGB", (self.WIDTH, total_h), theme["background"])
@@ -82,12 +85,24 @@ class ProfileCardRenderer(CardRenderer):
         self._text(draw, (40, 75), "COMMANDER PROFILE / \u6307\u6325\u5b98\u6863\u6848", 22, theme["primary"])
         self._text_right(draw, (self.WIDTH - 40, 30), data.commander_name, 36, theme["text"], width=500, bold=True)
 
-        # Sections
+        # Sections or empty-state fallback
         y = header_h + 20
-        for idx, (draw_fn, h) in enumerate(sections):
-            fill = theme["panel"] if idx % 2 == 0 else theme["panel_alt"]
-            draw_fn(draw, (40, y, self.WIDTH - 40, y + h), fill)
-            y += h + panel_gap
+        if sections:
+            for idx, (draw_fn, h) in enumerate(sections):
+                fill = theme["panel"] if idx % 2 == 0 else theme["panel_alt"]
+                draw_fn(draw, (40, y, self.WIDTH - 40, y + h), fill)
+                y += h + panel_gap
+        else:
+            empty_h = 160
+            box = (40, y, self.WIDTH - 40, y + empty_h)
+            draw.rounded_rectangle(box, 14, fill=theme["panel"], outline=theme["border"], width=1)
+            font = self.font(26)
+            msg = "\u6682\u65e0\u53ef\u7528\u8fdb\u5ea6\u6570\u636e"
+            draw.text(
+                (self.WIDTH // 2, y + empty_h // 2),
+                msg, font=font, fill=theme["muted"], anchor="mm",
+            )
+            y += empty_h + panel_gap
 
         # Footer
         footer = f"{data.fetched_at}  \u00b7  v{data.plugin_version}  \u00b7  BlaBlaLink"

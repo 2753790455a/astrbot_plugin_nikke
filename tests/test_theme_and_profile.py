@@ -10,8 +10,10 @@ from astrbot_plugin_nikke.card_theme import (
     _lighten,
 )
 from astrbot_plugin_nikke.profile_builder import ProfileBuilder
+from astrbot_plugin_nikke.profile_card_renderer import ProfileCardRenderer
 from astrbot_plugin_nikke.profile_models import ProfileDashboardData
 from PIL import Image
+import tempfile
 
 
 class AutoThemeTests(unittest.TestCase):
@@ -134,7 +136,7 @@ class ProfileBuilderTests(unittest.TestCase):
         )
         self.assertIsNone(result.synchro_level)
 
-    def test_zero_synchro_level_becomes_none(self):
+    def test_zero_synchro_level_is_valid(self):
         result = self.builder.build(
             account={},
             basic={},
@@ -143,7 +145,18 @@ class ProfileBuilderTests(unittest.TestCase):
             fetched_at="test",
             plugin_version="test",
         )
-        self.assertIsNone(result.synchro_level)
+        self.assertEqual(result.synchro_level, 0)
+
+    def test_zero_outpost_battle_level_is_valid(self):
+        result = self.builder.build(
+            account={},
+            basic={},
+            outpost={"outpost_battle_level": 0},
+            roster=[],
+            fetched_at="test",
+            plugin_version="test",
+        )
+        self.assertEqual(result.outpost_battle_level, 0)
 
     def test_commander_name_fallback_chain(self):
         result = self.builder.build(
@@ -182,6 +195,57 @@ class ProfileBuilderTests(unittest.TestCase):
         )
         self.assertEqual(result.max_combat, 60000)
         self.assertEqual(result.max_level, 150)
+
+
+class ProfileEmptyStateTests(unittest.TestCase):
+    def _renderer(self, tmpdir):
+        from pathlib import Path
+        font_dir = Path(__file__).resolve().parents[1] / "fonts"
+        return ProfileCardRenderer(tmpdir, font_dir)
+
+    def test_empty_profile_renders_with_fallback_message(self):
+        data = ProfileDashboardData(
+            commander_name="\u6307\u6325\u5b98",
+            area_id="",
+            synchro_level=None,
+            outpost_battle_level=None,
+            normal_campaign=None,
+            hard_campaign=None,
+            character_count=0,
+            max_level=0,
+            max_combat=0,
+            fetched_at="2026-09-05 12:00",
+            plugin_version="0.1.7",
+        )
+        with tempfile.TemporaryDirectory() as tmpdir:
+            renderer = self._renderer(tmpdir)
+            path = renderer.render_profile(data)
+            self.assertTrue(path.endswith(".png"))
+            img = Image.open(path)
+            self.assertEqual(img.size[0], 1200)
+            self.assertGreater(img.size[1], 200)
+            img.close()
+
+    def test_zero_level_shows_in_outpost_section(self):
+        data = ProfileDashboardData(
+            commander_name="Test",
+            area_id="",
+            synchro_level=0,
+            outpost_battle_level=0,
+            normal_campaign=None,
+            hard_campaign=None,
+            character_count=0,
+            max_level=0,
+            max_combat=0,
+            fetched_at="2026-09-05 12:00",
+            plugin_version="0.1.7",
+        )
+        with tempfile.TemporaryDirectory() as tmpdir:
+            renderer = self._renderer(tmpdir)
+            path = renderer.render_profile(data)
+            img = Image.open(path)
+            self.assertGreater(img.size[1], 200)
+            img.close()
 
 
 if __name__ == "__main__":

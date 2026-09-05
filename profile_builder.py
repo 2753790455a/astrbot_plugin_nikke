@@ -28,10 +28,10 @@ class ProfileBuilder:
         area_id = str(account.get("area_id", ""))
 
         synchro_raw = outpost.get("synchro_level")
-        synchro_level = int(synchro_raw) if synchro_raw not in (None, "", "0") else None
+        synchro_level = int(synchro_raw) if synchro_raw not in (None, "") else None
 
         outpost_raw = outpost.get("outpost_battle_level")
-        outpost_battle_level = int(outpost_raw) if outpost_raw not in (None, "", "0") else None
+        outpost_battle_level = int(outpost_raw) if outpost_raw not in (None, "") else None
 
         normal_campaign = str(
             basic.get("progress_normal_campaign")
