@@ -1,0 +1,88 @@
+{
+  "endpoint": "/api/game/proxy/Game/GetUserProfileOutpostInfo",
+  "method": "POST",
+  "request_keys": [
+    "nikke_area_id"
+  ],
+  "data": {
+    "outpost_info": {
+      "infra_core_level": 0,
+      "is_hide": false,
+      "jukebox_count": 0,
+      "memorial_counts": [
+        {
+          "category": "[已脱敏]",
+          "count": 0
+        },
+        {
+          "category": "[已脱敏]",
+          "count": 0
+        },
+        {
+          "category": "[已脱敏]",
+          "count": 0
+        },
+        {
+          "category": "[已脱敏]",
+          "count": 0
+        },
+        {
+          "category": "[已脱敏]",
+          "count": 0
+        }
+      ],
+      "outpost_battle_level": 0,
+      "recycle_room_researches": [
+        {
+          "exp": 0,
+          "lv": 0,
+          "tid": 0
+        },
+        {
+          "exp": 0,
+          "lv": 0,
+          "tid": 0
+        },
+        {
+          "exp": 0,
+          "lv": 0,
+          "tid": 0
+        },
+        {
+          "exp": 0,
+          "lv": 0,
+          "tid": 0
+        },
+        {
+          "exp": 0,
+          "lv": 0,
+          "tid": 0
+        },
+        {
+          "exp": 0,
+          "lv": 0,
+          "tid": 0
+        },
+        {
+          "exp": 0,
+          "lv": 0,
+          "tid": 0
+        },
+        {
+          "exp": 0,
+          "lv": 0,
+          "tid": 0
+        },
+        {
+          "exp": 0,
+          "lv": 0,
+          "tid": 0
+        }
+      ],
+      "synchro_level": 0,
+      "synchro_nonempty_slot_count": 0,
+      "tactic_academy_class": 0,
+      "tactic_academy_lesson": 0
+    }
+  }
+}

@@ -1,0 +1,246 @@
+{
+  "endpoint": "/api/game/proxy/Game/GetUserProfileBasicInfo",
+  "method": "POST",
+  "request_keys": [
+    "intl_open_id",
+    "nikke_area_id"
+  ],
+  "data": {
+    "basic_info": {
+      "area_id": "[已脱敏]",
+      "character_costume_count": 0,
+      "character_count": 0,
+      "corporation_character_counts": [
+        {
+          "corporation_type": 0,
+          "count": 0
+        },
+        {
+          "corporation_type": 0,
+          "count": 0
+        },
+        {
+          "corporation_type": 0,
+          "count": 0
+        },
+        {
+          "corporation_type": 0,
+          "count": 0
+        },
+        {
+          "corporation_type": 0,
+          "count": 0
+        }
+      ],
+      "created_at": "[已脱敏]",
+      "currencies": [
+        {
+          "type": 0,
+          "value": "[已脱敏]"
+        },
+        {
+          "type": 0,
+          "value": "[已脱敏]"
+        },
+        {
+          "type": 0,
+          "value": "[已脱敏]"
+        },
+        {
+          "type": 0,
+          "value": "[已脱敏]"
+        },
+        {
+          "type": 0,
+          "value": "[已脱敏]"
+        },
+        {
+          "type": 0,
+          "value": "[已脱敏]"
+        },
+        {
+          "type": 0,
+          "value": "[已脱敏]"
+        },
+        {
+          "type": 0,
+          "value": "[已脱敏]"
+        },
+        {
+          "type": 0,
+          "value": "[已脱敏]"
+        }
+      ],
+      "gsn": "[已脱敏]",
+      "has_saved_role_info": 0,
+      "icon_id": 0,
+      "is_banned": 0,
+      "is_icon_prism": 0,
+      "is_maintenance": 0,
+      "last_action_at": "[已脱敏]",
+      "lv": 0,
+      "nickname": "[已脱敏]",
+      "profile_team": [
+        {
+          "name_code": 0,
+          "slot": 0
+        },
+        {
+          "name_code": 0,
+          "slot": 0
+        },
+        {
+          "name_code": 0,
+          "slot": 0
+        },
+        {
+          "name_code": 0,
+          "slot": 0
+        },
+        {
+          "name_code": 0,
+          "slot": 0
+        },
+        {
+          "name_code": 0,
+          "slot": 0
+        }
+      ],
+      "progress_easy_campaign": 0,
+      "progress_hard_campaign": 0,
+      "progress_normal_campaign": 0,
+      "progress_tribe_tower": 0,
+      "role_name": "[已脱敏]",
+      "sim_room_overclock_current_sub_season_high_score": 0,
+      "sim_room_overclock_high_score_history": [
+        {
+          "option_level": 0,
+          "option_list": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "season": 0
+        },
+        {
+          "option_level": 0,
+          "option_list": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "season": 0
+        },
+        {
+          "option_level": 0,
+          "option_list": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "season": 0
+        },
+        {
+          "option_level": 0,
+          "option_list": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "season": 0
+        },
+        {
+          "option_level": 0,
+          "option_list": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "season": 0
+        },
+        {
+          "option_level": 0,
+          "option_list": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "season": 0
+        },
+        {
+          "option_level": 0,
+          "option_list": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "season": 0
+        },
+        {
+          "option_level": 0,
+          "option_list": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "season": 0
+        }
+      ],
+      "sim_room_overclock_latest_season_high_score": 0,
+      "team_combat": 0
+    }
+  }
+}

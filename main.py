@@ -32,7 +32,7 @@ from .web_service import BindingWebService
     "astrbot_plugin_nikke",
     "September",
     "NIKKE BlaBlaLink 账号练度、资料查询与每日汇总",
-    "0.1.7",
+    "0.1.8",
     "https://github.com/September6969/astrbot_plugin_nikke",
 )
 class NikkePlugin(Star):
@@ -209,7 +209,7 @@ class NikkePlugin(Star):
         if include_admin:
             visible.append(sections["管理"])
         return (
-            "NIKKE 综合助手 0.1.7\n\n"
+            "NIKKE 综合助手 0.1.8\n\n"
             "六个入口：帮助｜账号｜我的｜查询｜签到｜兑换\n\n"
             + "\n\n".join(visible)
             + "\n\n分类帮助：/妮姬 帮助 账号|查询|日常"
@@ -338,20 +338,62 @@ class NikkePlugin(Star):
             f"每日汇总：{'开启' if account['push_enabled'] else '关闭'}"
         )
 
+    @staticmethod
+    def _profile_rows(account: dict, basic: dict, outpost: dict) -> list[tuple[str, str]]:
+        """只使用真实响应已确认存在的字段生成档案行。"""
+        rows = [
+            ("指挥官", str(basic.get("nickname") or account.get("nickname") or account.get("role_name") or "未知")),
+            ("区服", str(account.get("area_id") or "未知")),
+            ("同步器", str(outpost.get("synchro_level", 0))),
+            ("前哨等级", str(outpost.get("outpost_battle_level", 0))),
+            ("普通主线", str(basic.get("progress_normal_campaign", basic.get("progress_campaign_normal", "未知")))),
+            ("困难主线", str(basic.get("progress_hard_campaign", basic.get("progress_campaign_hard", "未知")))),
+        ]
+
+        optional = (
+            ("lv", "指挥官等级"),
+            ("team_combat", "部队总战力"),
+            ("icon_id", "头像 ID"),
+            ("created_at", "注册时间"),
+            ("character_count", "持有妮姬"),
+            ("character_costume_count", "时装数量"),
+            ("progress_tribe_tower", "部落塔进度"),
+            ("sim_room_overclock_current_sub_season_high_score", "模拟室超频分数"),
+        )
+        for key, label in optional:
+            if key in basic and basic[key] not in (None, ""):
+                value = basic[key]
+                if key == "team_combat" and isinstance(value, (int, float)):
+                    value = f"{int(value):,}"
+                rows.append((label, str(value)))
+
+        outpost_optional = (
+            ("infra_core_level", "基础核心等级"),
+            ("tactic_academy_class", "战术学院班级"),
+            ("tactic_academy_lesson", "战术学院课程"),
+            ("jukebox_count", "点唱机收集"),
+        )
+        for key, label in outpost_optional:
+            if key in outpost and outpost[key] not in (None, ""):
+                rows.append((label, str(outpost[key])))
+
+        researches = outpost.get("recycle_room_researches")
+        if isinstance(researches, list):
+            levels = [int(item.get("lv", 0) or 0) for item in researches if isinstance(item, dict)]
+            rows.append(("回收室研究", f"{len(levels)} 项 · 等级合计 {sum(levels)}"))
+        memorials = outpost.get("memorial_counts")
+        if isinstance(memorials, list):
+            count = sum(int(item.get("count", 0) or 0) for item in memorials if isinstance(item, dict))
+            rows.append(("收藏记录", str(count)))
+        return rows
+
     async def me(self, event: AstrMessageEvent):
         """生成个人账号概览卡。"""
         try:
             account = self._account_or_error(event)
             data = await self.client.get_profile(account)
             basic, outpost = data["basic"], data["outpost"]
-            rows = [
-                ("指挥官", str(basic.get("nickname") or account.get("nickname") or account.get("role_name") or "未知")),
-                ("区服", str(account.get("area_id") or "未知")),
-                ("同步器", str(outpost.get("synchro_level", 0))),
-                ("前哨等级", str(outpost.get("outpost_battle_level", 0))),
-                ("普通主线", str(basic.get("progress_normal_campaign", basic.get("progress_campaign_normal", "未知")))),
-                ("困难主线", str(basic.get("progress_hard_campaign", basic.get("progress_campaign_hard", "未知")))),
-            ]
+            rows = self._profile_rows(account, basic, outpost)
             path = self.renderer.render("指挥官档案", "BlaBlaLink 私人数据", rows)
             yield event.image_result(path)
         except CookieExpired:
@@ -433,7 +475,7 @@ class NikkePlugin(Star):
                 directory=target,
                 payload=payload,
                 fetched_at=datetime.now(timezone(timedelta(hours=8))).strftime("%Y-%m-%d %H:%M"),
-                plugin_version="0.1.7",
+                plugin_version="0.1.8",
             )
             path = await asyncio.to_thread(self.character_renderer.render_character, card)
             yield event.image_result(path)
@@ -726,7 +768,7 @@ class NikkePlugin(Star):
             return
         accounts = self.store.list_accounts(with_cookie=False)
         yield event.plain_result(
-            f"NIKKE插件 0.1.7\n账号：{len(accounts)}\n目录：{len(self._directory)}\n"
+            f"NIKKE插件 0.1.8\n账号：{len(accounts)}\n目录：{len(self._directory)}\n"
             f"绑定服务：{self.web_host}:{self.web_port}\n"
             f"自动签到：{'启用' if self.config.get('enable_daily_actions', False) else '关闭'}\n"
             f"CDK兑换：{'启用' if self.config.get('enable_cdk_redemption', False) else '关闭'}"

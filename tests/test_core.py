@@ -441,6 +441,31 @@ class ExtensionTests(unittest.TestCase):
         self.assertIn("url.password", popup)
 
 
+class ProfileFixtureTests(unittest.TestCase):
+    def test_profile_fixtures_keep_confirmed_keys_and_are_fully_sanitized(self):
+        root = Path(__file__).resolve().parents[1] / "tests" / "fixtures"
+        profile = json.loads((root / "profile_basic_full_keys.json").read_text(encoding="utf-8"))
+        outpost = json.loads((root / "outpost_full_keys.json").read_text(encoding="utf-8"))
+        basic = profile["data"]["basic_info"]
+        outpost_info = outpost["data"]["outpost_info"]
+
+        self.assertTrue({"lv", "icon_id", "created_at", "team_combat", "progress_tribe_tower"} <= set(basic))
+        self.assertTrue({"infra_core_level", "recycle_room_researches", "memorial_counts"} <= set(outpost_info))
+
+        def assert_sanitized(value):
+            if isinstance(value, dict):
+                for item in value.values():
+                    assert_sanitized(item)
+            elif isinstance(value, list):
+                for item in value:
+                    assert_sanitized(item)
+            elif isinstance(value, str):
+                self.assertIn(value, {"", "[已脱敏]"})
+
+        assert_sanitized(profile["data"])
+        assert_sanitized(outpost["data"])
+
+
 class HelpTests(unittest.TestCase):
     def test_help_lists_six_chinese_entries_and_english_aliases(self):
         from astrbot_plugin_nikke.main import NikkePlugin
@@ -475,6 +500,42 @@ class HelpTests(unittest.TestCase):
 
 
 class CommandRoutingTests(unittest.IsolatedAsyncioTestCase):
+    def test_profile_rows_use_confirmed_optional_fields(self):
+        from astrbot_plugin_nikke.main import NikkePlugin
+
+        rows = dict(
+            NikkePlugin._profile_rows(
+                {"area_id": "3", "nickname": "测试"},
+                {
+                    "nickname": "测试",
+                    "lv": 99,
+                    "team_combat": 1234567,
+                    "icon_id": 42,
+                    "created_at": "2024-01-01",
+                    "character_count": 80,
+                    "character_costume_count": 12,
+                    "progress_normal_campaign": 100,
+                    "progress_hard_campaign": 50,
+                    "progress_tribe_tower": 200,
+                    "sim_room_overclock_current_sub_season_high_score": 31,
+                },
+                {
+                    "synchro_level": 300,
+                    "outpost_battle_level": 250,
+                    "infra_core_level": 20,
+                    "tactic_academy_class": 9,
+                    "tactic_academy_lesson": 3,
+                    "jukebox_count": 25,
+                    "recycle_room_researches": [{"lv": 10}, {"lv": 20}],
+                    "memorial_counts": [{"count": 4}, {"count": 6}],
+                },
+            )
+        )
+        self.assertEqual(rows["指挥官等级"], "99")
+        self.assertEqual(rows["部队总战力"], "1,234,567")
+        self.assertEqual(rows["回收室研究"], "2 项 · 等级合计 30")
+        self.assertEqual(rows["收藏记录"], "10")
+
     async def test_chinese_and_legacy_commands_share_one_root_router(self):
         from astrbot_plugin_nikke.main import NikkePlugin
 
