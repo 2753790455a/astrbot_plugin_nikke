@@ -115,12 +115,15 @@ class ProfileCardRenderer(CardRenderer):
 
     def _collect_sections(self, data):
         sections = []
-        if data.area_id or data.normal_campaign or data.hard_campaign:
+        if data.area_id or data.normal_campaign or data.hard_campaign or data.commander_level is not None or data.team_combat is not None:
             sections.append(self._basic_info_section(data))
-        if data.synchro_level is not None or data.outpost_battle_level is not None:
+        if data.synchro_level is not None or data.outpost_battle_level is not None or data.infra_core_level or data.tactic_academy_class or data.tactic_academy_lesson or data.jukebox_count or data.recycle_room_summary or data.memorial_summary:
             sections.append(self._outpost_section(data))
         if data.character_count > 0:
             sections.append(self._roster_stats_section(data))
+        extra = self._extra_items(data)
+        if extra:
+            sections.append(self._extra_section(extra))
         return sections
 
     def _basic_info_section(self, data):
@@ -130,6 +133,10 @@ class ProfileCardRenderer(CardRenderer):
             items = []
             if data.area_id:
                 items.append(("\u533a\u670d ID", data.area_id))
+            if data.commander_level is not None:
+                items.append(("\u6307\u6325\u5b98\u7b49\u7ea7", str(data.commander_level)))
+            if data.team_combat is not None:
+                items.append(("\u90e8\u961f\u603b\u6218\u529b", f"{data.team_combat:,}"))
             if data.normal_campaign:
                 items.append(("\u666e\u901a\u4e3b\u7ebf", data.normal_campaign))
             if data.hard_campaign:
@@ -140,7 +147,10 @@ class ProfileCardRenderer(CardRenderer):
                 self._text(draw, (col_x, col_y), label, 18, PROFILE_THEME["muted"])
                 self._text(draw, (col_x, col_y + 28), value, 28, PROFILE_THEME["text"], width=340, bold=True)
 
-        item_count = sum(1 for v in [data.area_id, data.normal_campaign, data.hard_campaign] if v)
+        item_count = sum(1 for v in [
+            data.area_id, data.commander_level is not None, data.team_combat is not None,
+            data.normal_campaign, data.hard_campaign,
+        ] if v)
         rows = (item_count + 2) // 3
         height = 55 + rows * 70 + 20
         return draw_section, height
@@ -154,13 +164,31 @@ class ProfileCardRenderer(CardRenderer):
                 items.append(("\u540c\u6b65\u5668\u7b49\u7ea7", self._number(data.synchro_level)))
             if data.outpost_battle_level is not None:
                 items.append(("\u524d\u54e8\u6218\u6597\u7b49\u7ea7", self._number(data.outpost_battle_level)))
+            if data.infra_core_level:
+                items.append(("\u57fa\u7840\u6838\u5fc3\u7b49\u7ea7", data.infra_core_level))
+            if data.tactic_academy_class:
+                items.append(("\u6218\u672f\u5b66\u9662\u73ed\u7ea7", data.tactic_academy_class))
+            if data.tactic_academy_lesson:
+                items.append(("\u6218\u672f\u5b66\u9662\u8bfe\u7a0b", data.tactic_academy_lesson))
+            if data.jukebox_count:
+                items.append(("\u70b9\u5531\u673a\u6536\u96c6", data.jukebox_count))
+            if data.recycle_room_summary:
+                items.append(("\u56de\u6536\u5ba4\u7814\u7a76", data.recycle_room_summary))
+            if data.memorial_summary:
+                items.append(("\u6536\u85cf\u8bb0\u5f55", data.memorial_summary))
             for idx, (label, value) in enumerate(items):
-                col_x = x + idx * 550
-                self._text(draw, (col_x, y), label, 18, PROFILE_THEME["muted"])
-                self._text(draw, (col_x, y + 28), value, 42, PROFILE_THEME["secondary"], width=500, bold=True)
+                col_x = x + (idx % 3) * 370
+                col_y = y + (idx // 3) * 70
+                self._text(draw, (col_x, col_y), label, 18, PROFILE_THEME["muted"])
+                self._text(draw, (col_x, col_y + 28), value, 28, PROFILE_THEME["secondary"], width=340, bold=True)
 
-        item_count = sum(1 for v in [data.synchro_level, data.outpost_battle_level] if v is not None)
-        height = 55 + 70 + 20
+        item_count = sum(1 for v in [
+            data.synchro_level is not None, data.outpost_battle_level is not None,
+            data.infra_core_level, data.tactic_academy_class, data.tactic_academy_lesson,
+            data.jukebox_count, data.recycle_room_summary, data.memorial_summary,
+        ] if v)
+        rows = (item_count + 2) // 3
+        height = 55 + rows * 70 + 20
         return draw_section, height
 
     def _roster_stats_section(self, data):
@@ -172,10 +200,42 @@ class ProfileCardRenderer(CardRenderer):
                 ("\u6700\u9ad8\u7b49\u7ea7", f"Lv.{data.max_level}"),
                 ("\u6700\u9ad8\u5355\u4f53\u6218\u529b", f"{data.max_combat:,}"),
             ]
+            if data.character_costume_count is not None:
+                items.append(("\u65f6\u88c5\u6570\u91cf", str(data.character_costume_count)))
             for idx, (label, value) in enumerate(items):
-                col_x = x + idx * 370
-                self._text(draw, (col_x, y), label, 18, PROFILE_THEME["muted"])
-                self._text(draw, (col_x, y + 28), value, 36, PROFILE_THEME["primary"], width=340, bold=True)
+                col_x = x + (idx % 3) * 370
+                col_y = y + (idx // 3) * 70
+                self._text(draw, (col_x, col_y), label, 18, PROFILE_THEME["muted"])
+                self._text(draw, (col_x, col_y + 28), value, 36, PROFILE_THEME["primary"], width=340, bold=True)
 
-        height = 55 + 70 + 20
+        item_count = 3 + (1 if data.character_costume_count is not None else 0)
+        rows = (item_count + 2) // 3
+        height = 55 + rows * 70 + 20
+        return draw_section, height
+
+    @staticmethod
+    def _extra_items(data) -> list[tuple[str, str]]:
+        items: list[tuple[str, str]] = []
+        if data.icon_id:
+            items.append(("\u5934\u50cf ID", str(data.icon_id)))
+        if data.created_at:
+            items.append(("\u6ce8\u518c\u65f6\u95f4", str(data.created_at)))
+        if data.progress_tribe_tower:
+            items.append(("\u90e8\u843d\u5854\u8fdb\u5ea6", str(data.progress_tribe_tower)))
+        if data.sim_room_overclock_score:
+            items.append(("\u6a21\u62df\u5ba4\u8d85\u9891\u5206\u6570", str(data.sim_room_overclock_score)))
+        return items
+
+    def _extra_section(self, items: list[tuple[str, str]]):
+        def draw_section(draw, box, fill):
+            self._section_panel(draw, box, "MORE / \u66f4\u591a\u6570\u636e", fill=fill)
+            x, y = box[0] + 30, box[1] + 55
+            for idx, (label, value) in enumerate(items):
+                col_x = x + (idx % 3) * 370
+                col_y = y + (idx // 3) * 70
+                self._text(draw, (col_x, col_y), label, 18, PROFILE_THEME["muted"])
+                self._text(draw, (col_x, col_y + 28), value, 28, PROFILE_THEME["text"], width=340, bold=True)
+
+        rows = (len(items) + 2) // 3
+        height = 55 + rows * 70 + 20
         return draw_section, height
