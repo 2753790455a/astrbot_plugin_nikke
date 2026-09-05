@@ -23,6 +23,17 @@ from astrbot_plugin_nikke.web_service import public_error
 VALID_COOKIE = "game_token=secret-token; game_uid=12345; game_openid=67890"
 
 
+def assert_fixture_sanitized(test: unittest.TestCase, value):
+    if isinstance(value, dict):
+        for item in value.values():
+            assert_fixture_sanitized(test, item)
+    elif isinstance(value, list):
+        for item in value:
+            assert_fixture_sanitized(test, item)
+    elif isinstance(value, str):
+        test.assertIn(value, {"", "[已脱敏]"})
+
+
 class BindingApiTests(unittest.IsolatedAsyncioTestCase):
     def test_public_error_contains_endpoint_and_masks_credentials(self):
         error = BlaBlaError("token=abc user@example.com", "1300001", "CheckLogin")
@@ -497,6 +508,43 @@ class HelpTests(unittest.TestCase):
         self.assertIn('@filter.command("妮姬", alias={"nikke"})', source)
         for command in ("skill", "advise", "stage", "tower", "cube", "collection", "image", "export"):
             self.assertNotIn(f'command("nikke {command}")', source)
+
+
+class UnionRaidFixtureTests(unittest.TestCase):
+    def test_four_confirmed_union_raid_fixtures_are_sanitized(self):
+        fixture_dir = Path(__file__).resolve().parent / "fixtures"
+        expected = {
+            "union_raid_overview.json": ("GetUnionRaidLevelInfo", "level_info"),
+            "union_raid_boss_list.json": ("GetUnionRaidLevelInfo", "boss_info"),
+            "union_raid_ranking.json": ("GetUnionRaidData", "participate_data"),
+            "union_raid_my_data.json": ("GetUnionRaidData", "participate_data"),
+        }
+        for name, (endpoint, data_key) in expected.items():
+            content = json.loads((fixture_dir / name).read_text(encoding="utf-8"))
+            self.assertEqual(content["method"], "POST")
+            self.assertTrue(content["endpoint"].endswith(endpoint))
+            self.assertEqual(
+                content["request_keys"],
+                ["guild_id", "intl_open_id", "nikke_area_id"],
+            )
+            self.assertIn(data_key, content["data"])
+            assert_fixture_sanitized(self, content["data"])
+
+    def test_union_raid_capture_has_confirmed_boss_and_account_rows(self):
+        fixture_dir = Path(__file__).resolve().parent / "fixtures"
+        overview = json.loads(
+            (fixture_dir / "union_raid_overview.json").read_text(encoding="utf-8")
+        )
+        my_data = json.loads(
+            (fixture_dir / "union_raid_my_data.json").read_text(encoding="utf-8")
+        )
+        boss_list = json.loads(
+            (fixture_dir / "union_raid_boss_list.json").read_text(encoding="utf-8")
+        )
+        self.assertTrue(overview["data"]["level_info"])
+        self.assertTrue(overview["data"]["level_info"][0]["boss_info"])
+        self.assertTrue(boss_list["data"]["boss_info"])
+        self.assertTrue(my_data["data"]["participate_data"])
 
 
 class CommandRoutingTests(unittest.IsolatedAsyncioTestCase):

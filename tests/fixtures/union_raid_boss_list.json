@@ -1,0 +1,169 @@
+{
+  "endpoint": "/api/game/proxy/Game/GetUnionRaidLevelInfo",
+  "method": "POST",
+  "request_keys": [
+    "guild_id",
+    "intl_open_id",
+    "nikke_area_id"
+  ],
+  "business_code": "0",
+  "data": {
+    "boss_info": [
+      {
+        "appearance_localkey": "[已脱敏]",
+        "appearance_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "boss_id": "[已脱敏]",
+        "current_hp": "[已脱敏]",
+        "desc_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "description_localkey": "[已脱敏]",
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "max_hp": "[已脱敏]",
+        "monster_model_id": "[已脱敏]",
+        "name_localkey": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        }
+      },
+      {
+        "appearance_localkey": "[已脱敏]",
+        "appearance_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "boss_id": "[已脱敏]",
+        "current_hp": "[已脱敏]",
+        "desc_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "description_localkey": "[已脱敏]",
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "max_hp": "[已脱敏]",
+        "monster_model_id": "[已脱敏]",
+        "name_localkey": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        }
+      },
+      {
+        "appearance_localkey": "[已脱敏]",
+        "appearance_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "boss_id": "[已脱敏]",
+        "current_hp": "[已脱敏]",
+        "desc_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "description_localkey": "[已脱敏]",
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "max_hp": "[已脱敏]",
+        "monster_model_id": "[已脱敏]",
+        "name_localkey": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        }
+      },
+      {
+        "appearance_localkey": "[已脱敏]",
+        "appearance_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "boss_id": "[已脱敏]",
+        "current_hp": "[已脱敏]",
+        "desc_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "description_localkey": "[已脱敏]",
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "max_hp": "[已脱敏]",
+        "monster_model_id": "[已脱敏]",
+        "name_localkey": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        }
+      },
+      {
+        "appearance_localkey": "[已脱敏]",
+        "appearance_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "boss_id": "[已脱敏]",
+        "current_hp": "[已脱敏]",
+        "desc_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "description_localkey": "[已脱敏]",
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "max_hp": "[已脱敏]",
+        "monster_model_id": "[已脱敏]",
+        "name_localkey": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,3497 @@
+{
+  "endpoint": "/api/game/proxy/Game/GetUnionRaidData",
+  "method": "POST",
+  "request_keys": [
+    "guild_id",
+    "intl_open_id",
+    "nikke_area_id"
+  ],
+  "business_code": "0",
+  "data": {
+    "banned_result": 0,
+    "contents_open_result": 0,
+    "participate_data": [
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": true,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": false,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": false,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": false,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": false,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": false,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": false,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": false,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": false,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      },
+      {
+        "boss_id": "[已脱敏]",
+        "day": 0,
+        "difficulty": 0,
+        "element_id": [
+          "[已脱敏]"
+        ],
+        "icon_id": "[已脱敏]",
+        "is_final_hit": false,
+        "level": 0,
+        "monster_model_id": "[已脱敏]",
+        "name_localvalues": {
+          "en": "[已脱敏]",
+          "ja": "[已脱敏]",
+          "ko": "[已脱敏]",
+          "zh-tw": "[已脱敏]"
+        },
+        "nickname": "[已脱敏]",
+        "openid": "[已脱敏]",
+        "squad": [
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          },
+          {
+            "combat": 0,
+            "costume_id": 0,
+            "lv": 0,
+            "slot": 0,
+            "tid": 0
+          }
+        ],
+        "step": 0,
+        "total_damage": "[已脱敏]"
+      }
+    ]
+  }
+}

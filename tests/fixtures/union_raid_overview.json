@@ -1,0 +1,186 @@
+{
+  "endpoint": "/api/game/proxy/Game/GetUnionRaidLevelInfo",
+  "method": "POST",
+  "request_keys": [
+    "guild_id",
+    "intl_open_id",
+    "nikke_area_id"
+  ],
+  "business_code": "0",
+  "data": {
+    "banned_result": 0,
+    "contents_open_result": 0,
+    "level_info": [
+      {
+        "boss_info": [
+          {
+            "appearance_localkey": "[已脱敏]",
+            "appearance_localvalues": {
+              "en": "[已脱敏]",
+              "ja": "[已脱敏]",
+              "ko": "[已脱敏]",
+              "zh-tw": "[已脱敏]"
+            },
+            "boss_id": "[已脱敏]",
+            "current_hp": "[已脱敏]",
+            "desc_localvalues": {
+              "en": "[已脱敏]",
+              "ja": "[已脱敏]",
+              "ko": "[已脱敏]",
+              "zh-tw": "[已脱敏]"
+            },
+            "description_localkey": "[已脱敏]",
+            "element_id": [
+              "[已脱敏]"
+            ],
+            "icon_id": "[已脱敏]",
+            "max_hp": "[已脱敏]",
+            "monster_model_id": "[已脱敏]",
+            "name_localkey": "[已脱敏]",
+            "name_localvalues": {
+              "en": "[已脱敏]",
+              "ja": "[已脱敏]",
+              "ko": "[已脱敏]",
+              "zh-tw": "[已脱敏]"
+            }
+          },
+          {
+            "appearance_localkey": "[已脱敏]",
+            "appearance_localvalues": {
+              "en": "[已脱敏]",
+              "ja": "[已脱敏]",
+              "ko": "[已脱敏]",
+              "zh-tw": "[已脱敏]"
+            },
+            "boss_id": "[已脱敏]",
+            "current_hp": "[已脱敏]",
+            "desc_localvalues": {
+              "en": "[已脱敏]",
+              "ja": "[已脱敏]",
+              "ko": "[已脱敏]",
+              "zh-tw": "[已脱敏]"
+            },
+            "description_localkey": "[已脱敏]",
+            "element_id": [
+              "[已脱敏]"
+            ],
+            "icon_id": "[已脱敏]",
+            "max_hp": "[已脱敏]",
+            "monster_model_id": "[已脱敏]",
+            "name_localkey": "[已脱敏]",
+            "name_localvalues": {
+              "en": "[已脱敏]",
+              "ja": "[已脱敏]",
+              "ko": "[已脱敏]",
+              "zh-tw": "[已脱敏]"
+            }
+          },
+          {
+            "appearance_localkey": "[已脱敏]",
+            "appearance_localvalues": {
+              "en": "[已脱敏]",
+              "ja": "[已脱敏]",
+              "ko": "[已脱敏]",
+              "zh-tw": "[已脱敏]"
+            },
+            "boss_id": "[已脱敏]",
+            "current_hp": "[已脱敏]",
+            "desc_localvalues": {
+              "en": "[已脱敏]",
+              "ja": "[已脱敏]",
+              "ko": "[已脱敏]",
+              "zh-tw": "[已脱敏]"
+            },
+            "description_localkey": "[已脱敏]",
+            "element_id": [
+              "[已脱敏]"
+            ],
+            "icon_id": "[已脱敏]",
+            "max_hp": "[已脱敏]",
+            "monster_model_id": "[已脱敏]",
+            "name_localkey": "[已脱敏]",
+            "name_localvalues": {
+              "en": "[已脱敏]",
+              "ja": "[已脱敏]",
+              "ko": "[已脱敏]",
+              "zh-tw": "[已脱敏]"
+            }
+          },
+          {
+            "appearance_localkey": "[已脱敏]",
+            "appearance_localvalues": {
+              "en": "[已脱敏]",
+              "ja": "[已脱敏]",
+              "ko": "[已脱敏]",
+              "zh-tw": "[已脱敏]"
+            },
+            "boss_id": "[已脱敏]",
+            "current_hp": "[已脱敏]",
+            "desc_localvalues": {
+              "en": "[已脱敏]",
+              "ja": "[已脱敏]",
+              "ko": "[已脱敏]",
+              "zh-tw": "[已脱敏]"
+            },
+            "description_localkey": "[已脱敏]",
+            "element_id": [
+              "[已脱敏]"
+            ],
+            "icon_id": "[已脱敏]",
+            "max_hp": "[已脱敏]",
+            "monster_model_id": "[已脱敏]",
+            "name_localkey": "[已脱敏]",
+            "name_localvalues": {
+              "en": "[已脱敏]",
+              "ja": "[已脱敏]",
+              "ko": "[已脱敏]",
+              "zh-tw": "[已脱敏]"
+            }
+          },
+          {
+            "appearance_localkey": "[已脱敏]",
+            "appearance_localvalues": {
+              "en": "[已脱敏]",
+              "ja": "[已脱敏]",
+              "ko": "[已脱敏]",
+              "zh-tw": "[已脱敏]"
+            },
+            "boss_id": "[已脱敏]",
+            "current_hp": "[已脱敏]",
+            "desc_localvalues": {
+              "en": "[已脱敏]",
+              "ja": "[已脱敏]",
+              "ko": "[已脱敏]",
+              "zh-tw": "[已脱敏]"
+            },
+            "description_localkey": "[已脱敏]",
+            "element_id": [
+              "[已脱敏]"
+            ],
+            "icon_id": "[已脱敏]",
+            "max_hp": "[已脱敏]",
+            "monster_model_id": "[已脱敏]",
+            "name_localkey": "[已脱敏]",
+            "name_localvalues": {
+              "en": "[已脱敏]",
+              "ja": "[已脱敏]",
+              "ko": "[已脱敏]",
+              "zh-tw": "[已脱敏]"
+            }
+          }
+        ],
+        "difficulty": 0,
+        "level": 0
+      }
+    ],
+    "manager_info": {
+      "id": "[已脱敏]",
+      "monster_preset": 0,
+      "season_disable_date": "[已脱敏]",
+      "season_end_date": "[已脱敏]",
+      "season_rank_calculate_date": "[已脱敏]",
+      "season_start_date": "[已脱敏]",
+      "season_visible_date": "[已脱敏]"
+    }
+  }
+}
