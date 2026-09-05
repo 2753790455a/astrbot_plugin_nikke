@@ -437,7 +437,8 @@ class ExtensionTests(unittest.TestCase):
         popup = (root / "extension" / "popup.js").read_text(encoding="utf-8")
         self.assertIn("buildFallbackContext", popup)
         self.assertIn("game_openid", popup)
-        self.assertNotIn("password", popup.lower())
+        self.assertNotIn("requestBody", popup)
+        self.assertIn("url.password", popup)
 
 
 class HelpTests(unittest.TestCase):

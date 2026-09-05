@@ -1,4 +1,4 @@
-NIKKE 综合助手 0.1.5
+NIKKE 综合助手 0.1.7
 
 本项目包含基于 ExiaProject/ExiaInvasion 的 API 调用流程、异常恢复策略与
 AEL 计算方法所作的移植和修改。

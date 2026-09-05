@@ -8,8 +8,10 @@ chrome.storage.local.get("bindUrl", ({ bindUrl }) => {
 
 function parseBindUrl() {
   const url = new URL(bindInput.value.trim());
-  if (url.protocol !== "https:" || url.hostname !== "nikke.irises777.xyz") {
-    throw new Error("必须使用 nikke.irises777.xyz 的HTTPS绑定链接");
+  const allowedOrigins = chrome.runtime.getManifest().host_permissions
+    .filter(pattern => !pattern.includes("*.")).map(pattern => new URL(pattern).origin);
+  if (url.protocol !== "https:" || url.username || url.password || url.search || url.hash || !allowedOrigins.includes(url.origin)) {
+    throw new Error("请使用此扩展所属机器人提供的HTTPS绑定链接");
   }
   const match = url.pathname.match(/^\/bind\/([A-Za-z0-9_-]{32,128})$/);
   if (!match) throw new Error("绑定链接格式不正确");
@@ -53,7 +55,16 @@ document.getElementById("submit").addEventListener("click", async () => {
     const missing = required.filter(name => !names.has(name));
     if (missing.length) throw new Error(`尚未完成登录，缺少：${missing.join(", ")}`);
     const stored = await chrome.storage.local.get("xCommonParams");
-    const xCommonParams = stored.xCommonParams || buildFallbackContext(cookies);
+    // 切换账号后不复用旧账号的请求上下文；损坏缓存同样使用当前Cookie重建。
+    let cachedContext = "";
+    try {
+      const cached = JSON.parse(stored.xCommonParams || "null");
+      const openid = cookies.find(cookie => cookie.name === "game_openid")?.value;
+      if (cached && String(cached.openid) === openid) cachedContext = stored.xCommonParams;
+    } catch {
+      // 无效缓存不阻断绑定。
+    }
+    const xCommonParams = cachedContext || buildFallbackContext(cookies);
     if (!xCommonParams) {
       throw new Error("尚未获取账号上下文。请确认已登录BlaBlaLink并刷新个人主页后重试。");
     }

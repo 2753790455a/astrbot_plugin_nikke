@@ -10,6 +10,7 @@ import secrets
 import time
 from collections import defaultdict, deque
 from pathlib import Path
+from urllib.parse import urlsplit
 
 from aiohttp import web
 
@@ -39,7 +40,12 @@ def public_error(exc: Exception) -> str:
 
 
 class BindingWebService:
-    def __init__(self, store: NikkeStore, client: BlaBlaClient, extension_zip: Path, api_key: str = ""):
+    def __init__(self, store: NikkeStore, client: BlaBlaClient, extension_zip: Path, api_key: str = "", public_base_url: str = SITE_ORIGIN):
+        parsed = urlsplit(public_base_url)
+        if (parsed.scheme != "https" or not parsed.hostname or parsed.username
+                or parsed.password or parsed.path not in ("", "/") or parsed.query or parsed.fragment):
+            raise ValueError("绑定服务公网地址必须是HTTPS站点地址，不能包含账号、路径或查询参数")
+        self.site_origin = f"https://{parsed.netloc}"
         self.store = store
         self.client = client
         self.extension_zip = extension_zip
@@ -58,7 +64,7 @@ class BindingWebService:
             return web.json_response({"ok": False, "error": "请求过于频繁"}, status=429)
         queue.append(now)
         origin = request.headers.get("Origin", "")
-        allowed_origin = origin == SITE_ORIGIN or bool(EXTENSION_ORIGIN_RE.fullmatch(origin))
+        allowed_origin = origin == self.site_origin or bool(EXTENSION_ORIGIN_RE.fullmatch(origin))
         if origin and request.path.startswith("/api/") and not allowed_origin:
             return web.json_response({"ok": False, "error": "不允许的请求来源"}, status=403)
         if request.method == "OPTIONS":
@@ -104,7 +110,7 @@ class BindingWebService:
         return web.Response(status=204)
 
     async def health(self, _: web.Request) -> web.Response:
-        return web.json_response({"ok": True, "service": "nikke-binding", "version": "0.1.5"})
+        return web.json_response({"ok": True, "service": "nikke-binding", "version": "0.1.7"})
 
     async def create_session(self, request: web.Request) -> web.Response:
         """供受信任的机器人进程创建绑定会话，公网匿名请求不能调用。"""

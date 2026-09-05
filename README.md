@@ -40,6 +40,7 @@
 2. 安装 `requirements.txt` 中的依赖并重启 AstrBot。
 3. 持久化 AstrBot 的 `data/nikke` 目录；其中包含数据库和 `secret.key`，两者必须一起备份。
 4. 将插件配置 `public_base_url` 改为自己的 HTTPS 域名。
+   自建域名请从自己站点的 `/download` 下载扩展；该 ZIP 会按 `public_base_url` 生成站点权限。修改域名后重启插件并重新安装扩展，GitHub 通用发布包仍对应默认站点。
 5. 使用 Caddy/Nginx 将公网 HTTPS 反代到 AstrBot 容器网络中的 `6210` 端口。
 6. **不要**把 `6210`、AstrBot 后台或 NapCat 后台直接映射到公网。
 7. 在 QQ 中发送 `/妮姬 帮助`，再私聊发送 `/妮姬 账号 绑定` 完成绑定。

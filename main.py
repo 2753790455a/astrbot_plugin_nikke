@@ -5,12 +5,13 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
+import json
 import os
 import random
 import re
 import secrets
 import zipfile
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from astrbot.api import logger
@@ -30,7 +31,7 @@ from .web_service import BindingWebService
     "astrbot_plugin_nikke",
     "September",
     "NIKKE BlaBlaLink 账号练度、资料查询与每日汇总",
-    "0.1.5",
+    "0.1.7",
     "https://github.com/September6969/astrbot_plugin_nikke",
 )
 class NikkePlugin(Star):
@@ -58,6 +59,7 @@ class NikkePlugin(Star):
             self.client,
             self.extension_zip,
             str(self.config.get("binding_api_key", "")),
+            public_base_url=str(self.config.get("public_base_url", "https://nikke.irises777.xyz")),
         )
         self.public_base_url = str(
             self.config.get("public_base_url", "https://nikke.irises777.xyz")
@@ -75,7 +77,14 @@ class NikkePlugin(Star):
         with zipfile.ZipFile(self.extension_zip, "w", zipfile.ZIP_DEFLATED) as archive:
             for path in extension_dir.rglob("*"):
                 if path.is_file():
-                    archive.write(path, path.relative_to(extension_dir))
+                    if path.name == "manifest.json":
+                        manifest = json.loads(path.read_text(encoding="utf-8"))
+                        manifest["host_permissions"] = [
+                            "https://*.blablalink.com/*", self.web.site_origin + "/*"
+                        ]
+                        archive.writestr("manifest.json", json.dumps(manifest, ensure_ascii=False, indent=2))
+                    else:
+                        archive.write(path, path.relative_to(extension_dir))
 
     async def _start_services(self) -> None:
         try:
@@ -94,7 +103,7 @@ class NikkePlugin(Star):
         last_daily = ""
         last_summary = ""
         while not self._closing:
-            now = datetime.now()
+            now = datetime.now(timezone(timedelta(hours=8)))
             today = now.strftime("%Y-%m-%d")
             daily_h = int(self.store.get_setting("daily_hour", self.config.get("daily_hour", 8)))
             daily_m = int(self.store.get_setting("daily_minute", self.config.get("daily_minute", 10)))
@@ -198,7 +207,7 @@ class NikkePlugin(Star):
         if include_admin:
             visible.append(sections["管理"])
         return (
-            "NIKKE 综合助手 0.1.5\n\n"
+            "NIKKE 综合助手 0.1.7\n\n"
             "六个入口：帮助｜账号｜我的｜查询｜签到｜兑换\n\n"
             + "\n\n".join(visible)
             + "\n\n分类帮助：/妮姬 帮助 账号|查询|日常"
@@ -421,8 +430,8 @@ class NikkePlugin(Star):
                 account=account,
                 directory=target,
                 payload=payload,
-                fetched_at=datetime.now().strftime("%Y-%m-%d %H:%M"),
-                plugin_version="0.1.5",
+                fetched_at=datetime.now(timezone(timedelta(hours=8))).strftime("%Y-%m-%d %H:%M"),
+                plugin_version="0.1.7",
             )
             path = self.character_renderer.render_character(card)
             yield event.image_result(path)
@@ -553,7 +562,7 @@ class NikkePlugin(Star):
             return
         try:
             account = self._account_or_error(event)
-            name, detail = await self._run_daily_for_account(account, datetime.now().strftime("%Y-%m-%d"))
+            name, detail = await self._run_daily_for_account(account, datetime.now(timezone(timedelta(hours=8))).strftime("%Y-%m-%d"))
             yield event.plain_result(f"{name}：{detail}")
         except Exception as exc:
             yield event.plain_result(f"签到失败：{exc}")
@@ -703,7 +712,7 @@ class NikkePlugin(Star):
         if not self._is_admin(event):
             yield event.plain_result("仅管理员可执行全量任务。")
             return
-        day = datetime.now().strftime("%Y-%m-%d")
+        day = datetime.now(timezone(timedelta(hours=8))).strftime("%Y-%m-%d")
         results = await self._run_all_daily(day)
         path = self.renderer.render_summary(results)
         yield event.image_result(path)
@@ -715,7 +724,7 @@ class NikkePlugin(Star):
             return
         accounts = self.store.list_accounts(with_cookie=False)
         yield event.plain_result(
-            f"NIKKE插件 0.1.5\n账号：{len(accounts)}\n目录：{len(self._directory)}\n"
+            f"NIKKE插件 0.1.7\n账号：{len(accounts)}\n目录：{len(self._directory)}\n"
             f"绑定服务：{self.web_host}:{self.web_port}\n"
             f"自动签到：{'启用' if self.config.get('enable_daily_actions', False) else '关闭'}\n"
             f"CDK兑换：{'启用' if self.config.get('enable_cdk_redemption', False) else '关闭'}"
